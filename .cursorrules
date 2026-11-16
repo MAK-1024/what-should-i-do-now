@@ -1,0 +1,141 @@
+# WHAT SHOULD I DO? — Master Production Engineering Protocol & Rules
+
+## 1. Persona & Token Conservation Protocol
+- **Role:** Senior Flutter Principal Architect & Lead Database Engineer.
+- **Token Efficiency:** Be concise and targeted. Never provide unsolicited essays, lengthy commentary, or redundant file repetitions.
+- **Production Completeness:** No placeholder "TODOs", unhandled catch blocks, or mock data stubs unless explicitly instructed. Every layer must have typed error handling.
+- **Zero-Warning Mandate:** All code must compile cleanly with `flutter analyze` having 0 errors, 0 warnings, and 0 linter hints.
+
+---
+
+## 2. Fixed Tech Stack & Dependency Rules
+- **Framework:** Flutter (Material 3 enabled, strict Dart 3+).
+- **Backend:** Supabase (Auth, PostgreSQL 15+, Row Level Security, RPC functions).
+- **State Management:** BLoC / Cubit (`flutter_bloc: ^8.1.6`) with `@freezed` or `Equatable`. Never introduce Riverpod or vanilla Provider.
+- **Dependency Injection:** `get_it` + `injectable`. Use `@injectable` for page/feature-scoped cubits; avoid registering page cubits as `@lazySingleton`.
+- **Routing:** `go_router: ^14.6.2` paired with `RouteList` constants and Supabase auth state change listener.
+- **Functional Architecture:** `fpdart: ^1.1.0` (`Either<Failure, T>`). Data and domain boundaries must never throw raw exceptions up to presentation.
+- **Motion:** `flutter_animate` only. Manual `AnimationController` / `Tween` chains are forbidden for UI polish.
+
+---
+
+## 3. Directory Layout & Separation of Concerns
+
+### NEVER merge `lib/core/` and `lib/config/`. Both must exist side-by-side.
+
+```text
+lib/
+  main.dart                           # Minimal entrypoint only (runApp)
+  app/                                # Shell, root providers, & MaterialApp
+    app.dart                          # MaterialApp.router, global cubit providers, l10n wiring
+    app_shell.dart                    # Bottom nav / scaffold wrapping shell routes
+    widgets/                          # Global chrome widgets (nav bar, drawer)
+  core/                               # Shared foundations (NOT config, NO feature logic)
+    base_cubit/                       # Shared cubit base helpers
+    bootstrap/                        # Startup logic, async init, dotenv loading
+    constants/                        # Cross-cutting constants & Supabase table names
+    di/                               # injection.dart + generated injection.config.dart
+    entities/                         # Shared cross-feature domain entities
+    enums/                            # Shared enums (priority, status)
+    errors/                           # Sealed Failure classes (ServerFailure, AuthFailure)
+    l10n/                             # ARB files (app_en.arb, app_ar.arb, app_fr.arb)
+    locale/                           # Locale extensions
+    models/                           # Shared cross-feature DTOs
+    network/                          # Supabase client wrapper & connectivity helpers
+    services/                         # Cross-cutting services (notifications, url_launcher)
+    utils/                            # AppMotion tokens, pure mappers, formatters
+  config/                             # App wiring & configuration (NOT core)
+    environment_config/               # Server URL, Supabase credentials, auth storage
+    routes/                           # route_list.dart, app_router.dart, route builders
+    theme/                            # AppColors, app_theme.dart, context.txt, context.radius
+  features/<feature_name>/            # Clean-Architecture feature modules
+    data/                             # datasources, models (DTOs), repository implementations
+    domain/                           # entities, repository interfaces, use cases
+    presentation/
+      cubit/                          # <feature>_cubit.dart & <feature>_state.dart
+      pages/                          # <feature>_page.dart (thin composition only)
+      widgets/<page_name>_page_widgets/
+        sections/                     # Banners, headers, logical sections
+        cards/                        # List items & card tiles
+        dialogs/                      # Modal dialogs
+        sheets/                       # Bottom sheets & action sheets
+        shared/                       # Page-scoped shared reusable widgets
+        shimmer/                      # Loading placeholders
+  shared/
+    widgets/                          # Reusable cross-feature widgets (CustomAppBar, PrimaryButton)
+```
+
+### Dependency Flow Matrix
+- `features/` and `app/` may depend on `core/`, `config/`, and `shared/`.
+- `config/` may depend on `core/`.
+- `core/` must **never** depend on `config/` or `features/`.
+- `presentation` -> `domain` <- `data` (Clean Architecture boundary). Never call repositories or datasources directly from UI widgets.
+
+---
+
+## 4. UI, Styling & Motion Standards
+
+### Localization Guard (Skill: `localization-guard`)
+- **No hardcoded user-visible strings.**
+- Every visible label, button text, error message, and placeholder must use `context.l10n.<key>` or `AppLocalizations.of(context)!.<key>`.
+- Any new key must be added simultaneously to all 3 ARB files:
+  - `lib/core/l10n/app_en.arb` (English template)
+  - `lib/core/l10n/app_ar.arb` (Arabic translation)
+  - `lib/core/l10n/app_fr.arb` (French translation)
+
+### Theme Token Enforcer (Skill: `theme-token-enforcer`)
+- **No hardcoded colors, font sizes, weights, or border radii in widgets.**
+- Colors must come from `AppColors` in `lib/config/theme/`.
+- Typography must come from `context.txt`.
+- Border radius must come from `context.radius` or `context.br(value)`.
+- Buttons: Use `AppButtonStyles.fullWidth` or `PrimaryCtaButton` for primary CTAs; keep default buttons compact. Minimum hit target: 44x44.
+
+### CustomAppBar Standard
+- Every pushed feature page that contains a title and back button must use `CustomAppBar` from `lib/shared/widgets/custom_app_bar.dart` as `Scaffold.appBar`.
+- Do not hand-roll a transparent `AppBar` with manual leading back buttons.
+
+### Motion Standard (Flutter Animate)
+- Use `flutter_animate` for UI entrances, staggers, and feedback.
+- Durations and curves must come exclusively from `AppMotion` in `lib/core/utils/app_motion.dart`.
+- Respect accessibility: users with animations disabled (`MediaQuery.disableAnimationsOf(context)` or `!AppMotion.isEnabled(context)`) must receive `Duration.zero`.
+- Exceptions: `GoRouter` page transitions and shared element `Hero` widgets.
+
+---
+
+## 5. Domain Invariants & Business Logic (PRD Enforcement)
+
+1. **One Active Task Per User:**
+   - Exactly one task can be `status == 'in_progress'` at a time for any user.
+   - Enforced by both PostgreSQL partial unique index and Cubit state guards.
+2. **Suggestion Engine RPC:**
+   - Always query the PostgreSQL RPC `get_random_task_suggestion(p_category_id, p_exclude_ids)`.
+   - Client manages a transient list of skipped task UUIDs (`p_exclude_ids`) to eliminate immediate repetition.
+   - The RPC automatically handles fallback to the eligible pool if all tasks were excluded.
+3. **Task Lifecycles:**
+   - `pending` -> `in_progress` (Accept / Take It)
+   - `in_progress` -> `completed` (Stamp `completed_at` with UTC timestamp)
+   - `in_progress` -> `pending` (Return to Pool / Abandon)
+   - Skipped suggestions remain `pending`.
+4. **Failure BlocListener Policy:**
+   - Use `BlocListener` with toast/snackbar failure handlers **only** for mutating actions (POST / PUT / PATCH / DELETE).
+   - Never show toast errors for read/query loads (GET). GET errors must render inline error/empty state views via state objects.
+
+---
+
+## 6. Route Synchronization Standard (Skill: `go-router-route-sync`)
+- Route names and paths must be declared as static constants in `lib/config/routes/route_list.dart`.
+- Every screen entry must be wired inside `lib/config/routes/app_router.dart`.
+- All navigation calls (`context.goNamed(...)`, `context.pushNamed(...)`) must reference `RouteList` constants, never raw string paths.
+- Tabbed root destinations must reside inside a `ShellRoute` referencing `AppShell` in `lib/app/app_shell.dart`.
+
+---
+
+## 7. Delivery & Code Generation Standard
+- **Source of Truth:** Never manually edit generated files (`*.freezed.dart`, `*.g.dart`, `injection.config.dart`).
+- When changing annotations, models, or injectables, run `flutter pub run build_runner build --delete-conflicting-outputs`.
+- Feature Definition of Done:
+  - [ ] Localization updated across English, Arabic, and French ARBs.
+  - [ ] Zero hardcoded hex colors, styles, or raw string routes.
+  - [ ] `lib/core/` and `lib/config/` retained without merging.
+  - [ ] Clean architectural boundaries honored (`presentation -> domain <- data`).
+  - [ ] `flutter analyze lib` passes with zero issues.

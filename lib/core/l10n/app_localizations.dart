@@ -166,6 +166,14 @@ class AppLocalizations {
   String get enterEmailPrompt => _t('enterEmailPrompt');
   String get passwordTooShort => _t('passwordTooShort');
 
+  // ── Legal ─────────────────────────────────────────────────────────────────
+  String get privacyPolicy => _t('privacyPolicy');
+  String get termsOfService => _t('termsOfService');
+
+  /// Must contain [termsOfService] and [privacyPolicy] verbatim so they can
+  /// be rendered as tappable links.
+  String get authLegalDisclaimer => _t('authLegalDisclaimer');
+
   // ── Forms & Dialogs ───────────────────────────────────────────────────────
   String get noCategoriesAvailable => _t('noCategoriesAvailable');
   String get createCategoryFirst => _t('createCategoryFirst');
@@ -306,6 +314,10 @@ class AppLocalizations {
       'enterDisplayNamePrompt': 'Please enter a display name',
       'enterEmailPrompt': 'Please enter your email',
       'passwordTooShort': 'Password must be at least 6 characters',
+      'privacyPolicy': 'Privacy Policy',
+      'termsOfService': 'Terms of Service',
+      'authLegalDisclaimer':
+          'By continuing, you agree to our Terms of Service and Privacy Policy.',
       'noCategoriesAvailable': 'No categories available',
       'createCategoryFirst':
           'Please create at least one category before adding tasks.',
@@ -440,6 +452,10 @@ class AppLocalizations {
       'enterDisplayNamePrompt': 'يرجى إدخال اسم العرض',
       'enterEmailPrompt': 'يرجى إدخال بريدك الإلكتروني',
       'passwordTooShort': 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل',
+      'privacyPolicy': 'سياسة الخصوصية',
+      'termsOfService': 'شروط الخدمة',
+      'authLegalDisclaimer':
+          'بالمتابعة، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.',
       'noCategoriesAvailable': 'لا توجد فئات متاحة',
       'createCategoryFirst': 'يرجى إنشاء فئة واحدة على الأقل قبل إضافة المهام.',
       'gotIt': 'فهمت',
@@ -577,6 +593,10 @@ class AppLocalizations {
       'enterDisplayNamePrompt': 'Inserisci un nome visualizzato',
       'enterEmailPrompt': 'Inserisci la tua email',
       'passwordTooShort': 'La password deve contenere almeno 6 caratteri',
+      'privacyPolicy': 'Informativa sulla privacy',
+      'termsOfService': 'Termini di servizio',
+      'authLegalDisclaimer':
+          'Continuando, accetti i nostri Termini di servizio e l\'Informativa sulla privacy.',
       'noCategoriesAvailable': 'Nessuna categoria disponibile',
       'createCategoryFirst':
           'Crea almeno una categoria prima di aggiungere attività.',

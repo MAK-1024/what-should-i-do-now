@@ -4,6 +4,7 @@ import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:wsidappp/features/auth/presentation/cubit/auth_state.dart';
+import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/sections/auth_legal_disclaimer.dart';
 import 'package:wsidappp/shared/widgets/custom_app_bar.dart';
 
 /// Clean scaffold for Authentication (Sign In & Sign Up).
@@ -162,6 +163,8 @@ class _AuthPageState extends State<AuthPage> {
                                   : l10n.dontHaveAccount,
                             ),
                           ),
+                          const SizedBox(height: 16),
+                          const AuthLegalDisclaimer(),
                         ],
                       ),
                     ),

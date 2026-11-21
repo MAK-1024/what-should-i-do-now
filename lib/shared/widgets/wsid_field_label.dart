@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'package:wsidappp/config/theme/theme_extensions.dart';
 
-/// Sage label with a required-field asterisk (Figma input field label).
-class AuthFieldLabel extends StatelessWidget {
-  const AuthFieldLabel({super.key, required this.label});
+/// Required-field label for app-wide form inputs.
+class WsidFieldLabel extends StatelessWidget {
+  const WsidFieldLabel({
+    super.key,
+    required this.label,
+  });
 
   final String label;
 
@@ -16,7 +20,8 @@ class AuthFieldLabel extends StatelessWidget {
           children: <InlineSpan>[
             TextSpan(
               text: label,
-              style: context.typo.title1Bold.copyWith(color: context.brand.fieldLabel),
+              style: context.typo.title1Bold
+                  .copyWith(color: context.brand.fieldLabel),
             ),
             TextSpan(
               text: ' *',

@@ -84,22 +84,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
     return Scaffold(
       backgroundColor: context.brand.pageBackground,
-      appBar: CustomAppBar(
-        showBackButton: false,
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () => context.push(RouteList.profile),
-        ),
-        titleWidget: context.isLightTheme
-            ? Text(l10n.categories, style: context.pageTitleStyle)
-            : null,
-        title: context.isLightTheme ? null : l10n.categories,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.notifications_none),
-            onPressed: () {},
-          ),
-        ],
+      appBar: WsidAppBar.main(
+        title: l10n.categories,
       ),
       body: BlocConsumer<CategoryCubit, CategoryState>(
         listener: (BuildContext context, CategoryState state) {

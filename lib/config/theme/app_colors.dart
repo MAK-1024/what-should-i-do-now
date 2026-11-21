@@ -1,51 +1,81 @@
 import 'package:flutter/material.dart';
 
-/// Sage Green design-system color tokens for the "What Should I Do?" app.
-/// Light and dark variants are grouped for clarity.
+/// Color tokens for the "What Should I Do?" app.
+///
+/// Single source of truth:
+///  1. Foundation palette  – raw values copied from the Figma design system.
+///  2. Light semantic tokens – aliases of the foundation palette.
+///  3. Dark tokens – unchanged.
+///
+/// Widgets must never hardcode colors; they read them from the theme.
 abstract final class AppColors {
-  // ── Light Brand / Palette ──────────────────────────────────────────────────
-  static const Color primary = Color(0xFF52796F);
-  static const Color primaryLight = Color(0xFF4A7C59);
-  static const Color primaryContainer = Color(0xFFEAF2EF);
-  static const Color onPrimary = Color(0xFFFFFFFF);
-  static const Color onPrimaryContainer = Color(0xFF1A3A32);
-
-  static const Color secondary = Color(0xFF4A7C59);
-  static const Color secondaryContainer = Color(0xFFD6EAD9);
-  static const Color onSecondary = Color(0xFFFFFFFF);
-
-  /// Warm amber — used for duration/time tags.
-  static const Color accent = Color(0xFFD97706);
-  static const Color accentContainer = Color(0xFFFEF3C7);
-
-  // ── Foundation palette (Figma design system) ──────────────────────────────
-  static const Color green800 = Color(0xFF324B3D);
+  // ── 1. Foundation palette (Figma: Foundation / Green · grey) ──────────────
+  static const Color green50 = Color(0xFFEFF3F1);
+  static const Color green100 = Color(0xFFCCDAD2);
+  static const Color green200 = Color(0xFFB4C9BD);
+  static const Color green300 = Color(0xFF91B09F);
+  static const Color green400 = Color(0xFF7CA18C);
   static const Color green500 = Color(0xFF5B896F);
   static const Color green600 = Color(0xFF537D65);
   static const Color green700 = Color(0xFF41614F);
-  static const Color green300 = Color(0xFF91B09F);
-  static const Color green200 = Color(0xFFB4C9BD);
-  static const Color green100 = Color(0xFFCCDAD2);
-  static const Color green50 = Color(0xFFEFF3F1);
-  static const Color grey900 = Color(0xFF2D3036);
-  static const Color grey700 = Color(0xFF4C515B);
-  static const Color grey600 = Color(0xFF616874);
+  static const Color green800 = Color(0xFF324B3D);
+  static const Color green900 = Color(0xFF263A2F);
+
   static const Color grey50 = Color(0xFFF0F1F2);
-  static const Color grey500 = Color(0xFF6B7280);
+  static const Color grey100 = Color(0xFFD1D3D8);
+  static const Color grey200 = Color(0xFFBBBEC5);
   static const Color grey300 = Color(0xFF9CA1AA);
+  static const Color grey400 = Color(0xFF898E99);
+  static const Color grey500 = Color(0xFF6B7280);
+  static const Color grey600 = Color(0xFF616874);
+  static const Color grey700 = Color(0xFF4C515B);
+  static const Color grey800 = Color(0xFF3B3F46);
+  static const Color grey900 = Color(0xFF2D3036);
+
+  // Status (Figma: Foundation / error · warning)
+  static const Color error50 = Color(0xFFFFEFED);
+  static const Color error500 = Color(0xFFFF614C);
+  static const Color error700 = Color(0xFFB54536);
+  static const Color error800 = Color(0xFF8C352A);
+  static const Color warning50 = Color(0xFFFBF8EA);
+  static const Color warning700 = Color(0xFF98801F);
+
+  // Other
   static const Color greyNeutral = Color(0xFF616161);
   static const Color inputOutline = Color(0xFFEAECF0);
 
   /// Teal-blue end stop of the blurred background glows.
   static const Color glowBlue = Color(0xFF5085A4);
 
-  // ── Light Backgrounds & Surfaces ──────────────────────────────────────────
-  static const Color background = Color(0xFFF8F9FA);
-  static const Color surface = Color(0xFFFFFFFF);
-  static const Color surfaceVariant = Color(0xFFEFF3F1);
-  static const Color outline = Color(0xFFE5E7EB);
+  // ── 2. Light semantic tokens (aliases of the foundation palette) ──────────
+  static const Color primary = green500;
+  static const Color primaryLight = green400;
+  static const Color primaryContainer = green50;
+  static const Color onPrimary = Color(0xFFFFFFFF);
+  static const Color onPrimaryContainer = green800;
 
-  // ── Dark Mode equivalents ─────────────────────────────────────────────────
+  static const Color secondary = green600;
+  static const Color secondaryContainer = green100;
+  static const Color onSecondary = Color(0xFFFFFFFF);
+
+  /// Warm amber — used for duration/time tags (also used by the dark theme).
+  static const Color accent = Color(0xFFD97706);
+  static const Color accentContainer = Color(0xFFFEF3C7);
+
+  static const Color background = Color(0xFFFFFFFF);
+  static const Color surface = Color(0xFFFFFFFF);
+  static const Color surfaceVariant = green50;
+
+  /// Dividers and hairline borders (app bar, nav bar, task rows).
+  static const Color outline = grey50;
+
+  static const Color textPrimary = grey900;
+  static const Color textSecondary = grey500;
+  static const Color textMuted = grey300;
+
+  static const Color errorContainer = error50;
+
+  // ── 3. Dark mode (unchanged) ──────────────────────────────────────────────
   static const Color darkBackground = Color(0xFF121816);
   static const Color darkSurface = Color(0xFF1C2522);
   static const Color darkSurfaceVariant = Color(0xFF243028);
@@ -56,28 +86,15 @@ abstract final class AppColors {
   static const Color darkAccentContainer = Color(0xFF3D2800);
   static const Color darkErrorContainer = Color(0xFF4A1515);
 
-  // ── Text ─────────────────────────────────────────────────────────────────
-  static const Color textPrimary = Color(0xFF111827);
-  static const Color textSecondary = Color(0xFF6B7280);
-  static const Color textMuted = Color(0xFF9CA3AF);
-
-  // Dark text
   static const Color darkTextPrimary = Color(0xFFE8F0ED);
   static const Color darkTextSecondary = Color(0xFF8FA89E);
 
-  // ── Status & Feedback ─────────────────────────────────────────────────────
+  // ── Status & feedback (shared) ────────────────────────────────────────────
   static const Color error = Color(0xFFEF4444);
-  static const Color errorContainer = Color(0xFFFEE2E2);
   static const Color onError = Color(0xFFFFFFFF);
   static const Color success = Color(0xFF10B981);
 
-  static const Color warning700 = Color(0xFF98801F);
-  static const Color warning50 = Color(0xFFFBF8EA);
-  static const Color error800 = Color(0xFF8C352A);
-  static const Color error700 = Color(0xFFB54536);
-  static const Color error500 = Color(0xFFFF614C);
-
-  // ── Category Preset Palette ───────────────────────────────────────────────
+  // ── Category preset palette ───────────────────────────────────────────────
   static const Color categoryGreen = primary;
   static const Color categoryTeal = Color(0xFF0D9488);
   static const Color categoryAmber = accent;
@@ -87,7 +104,7 @@ abstract final class AppColors {
   static const Color categoryViolet = Color(0xFF7C3AED);
   static const Color categoryOrange = Color(0xFFEA580C);
 
-  // Keep old aliases alive so existing code doesn't break
+  // Kept so existing code doesn't break
   static const Color categoryIndigo = Color(0xFF4F46E5);
 
   static const List<Color> categoryPalette = <Color>[

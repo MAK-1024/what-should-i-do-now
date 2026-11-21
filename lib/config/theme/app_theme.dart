@@ -41,9 +41,8 @@ ThemeData buildLightTheme() {
     outlineVariant: AppColors.outline,
   );
 
-  return _buildBase(colorScheme).copyWith(
-    scaffoldBackgroundColor: AppColors.background,
-  );
+  return _buildBase(colorScheme)
+      .copyWith(scaffoldBackgroundColor: AppColors.surface);
 }
 
 // ── Dark Theme ────────────────────────────────────────────────────────────────
@@ -75,9 +74,8 @@ ThemeData buildDarkTheme() {
     outlineVariant: AppColors.darkOutline,
   );
 
-  return _buildBase(colorScheme).copyWith(
-    scaffoldBackgroundColor: AppColors.darkBackground,
-  );
+  return _buildBase(colorScheme)
+      .copyWith(scaffoldBackgroundColor: AppColors.darkBackground);
 }
 
 // ── Shared base builder ───────────────────────────────────────────────────────
@@ -100,9 +98,7 @@ ThemeData _buildBase(ColorScheme colorScheme) {
       elevation: 0,
       color: surfaceColor,
       surfaceTintColor: Colors.transparent,
-      shape: _cardShape.copyWith(
-        side: BorderSide(color: outlineColor),
-      ),
+      shape: _cardShape.copyWith(side: BorderSide(color: outlineColor)),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,

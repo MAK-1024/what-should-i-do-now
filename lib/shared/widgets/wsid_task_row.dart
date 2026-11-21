@@ -1,32 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:wsidappp/config/theme/theme_extensions.dart';
-import 'package:wsidappp/core/l10n/app_localizations.dart';
-import 'package:wsidappp/features/tasks/domain/entities/task.dart';
-import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/shared/task_status_badge.dart';
 
-/// Row inside the grouped task list: status dot, title, "Category • N min",
-/// status badge and chevron.
-class TaskListTile extends StatelessWidget {
-  const TaskListTile({
+import 'package:wsidappp/config/theme/theme_extensions.dart';
+
+enum WsidTaskRowVariant {
+  defaultRow,
+  completed,
+}
+
+class WsidTaskRow extends StatelessWidget {
+  const WsidTaskRow({
     super.key,
-    required this.task,
+    required this.title,
     required this.categoryName,
+    required this.categoryColor,
+    required this.categoryIcon,
     required this.onTap,
+    this.variant = WsidTaskRowVariant.defaultRow,
   });
 
-  final Task task;
-  final String? categoryName;
+  final String title;
+  final String categoryName;
+  final Color categoryColor;
+  final IconData categoryIcon;
   final VoidCallback onTap;
+  final WsidTaskRowVariant variant;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final int? minutes = task.estimatedDuration;
-    final bool isCompleted = task.status == TaskStatus.completed;
-    final String subtitle = <String>[
-      categoryName ?? l10n.uncategorized,
-      if (minutes != null) l10n.minutesShort(minutes),
-    ].join(' • ');
+    final bool isCompleted = variant == WsidTaskRowVariant.completed;
 
     return InkWell(
       onTap: onTap,
@@ -36,14 +37,29 @@ class TaskListTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: <Widget>[
-              TaskStatusDot(status: task.status),
-              const SizedBox(width: 14),
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: categoryColor,
+                  borderRadius: context.radius.md,
+                ),
+                child: Icon(
+                  categoryIcon,
+                  size: 24,
+                  color: categoryColor.computeLuminance() > 0.5
+                      ? context.colors.onSurface
+                      : context.colors.surface,
+                ),
+              ),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      task.title,
+                      title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: context.txt.titleSmall?.copyWith(
@@ -57,7 +73,7 @@ class TaskListTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      subtitle,
+                      categoryName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: context.txt.bodySmall?.copyWith(
@@ -67,8 +83,6 @@ class TaskListTile extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
-              TaskStatusBadge(status: task.status),
               const SizedBox(width: 4),
               Icon(
                 Icons.chevron_right,

@@ -80,20 +80,9 @@ class _HomeSuggestionViewState extends State<_HomeSuggestionView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        titleWidget: const HomeBrandTitle(),
-        centerTitle: false,
-        showBackButton: false,
-        toolbarHeight: 88,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.person_outline),
-            tooltip: context.l10n.profile,
-            onPressed: () => context.push(RouteList.profile),
-          ),
-          const SizedBox(width: 8),
-        ],
+      appBar: WsidAppBar.logo(
+        onLeadingPressed: null,
+        onNotificationsPressed: null,
       ),
       body: MultiBlocListener(
         listeners: [

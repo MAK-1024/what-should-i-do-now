@@ -1,6 +1,6 @@
 name: wsidappp
 description: "What Should I Do? — A focused task decider app."
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -94,6 +94,8 @@ flutter:
   assets:
     - .env
     - assets/images/
+    - assets/images/char/
+    - assets/splash/
     - assets/fonts/Tajawal-OFL.txt
 
   fonts:

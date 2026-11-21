@@ -10,7 +10,6 @@ import 'package:wsidappp/core/constants/app_assets.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/core/utils/app_motion.dart';
 import 'package:wsidappp/features/onboarding/presentation/widgets/onboarding_page_widgets/sections/onboarding_actions.dart';
-import 'package:wsidappp/shared/widgets/brand_mesh_background.dart';
 import 'package:wsidappp/features/onboarding/presentation/widgets/onboarding_page_widgets/sections/onboarding_slide.dart';
 import 'package:wsidappp/features/onboarding/presentation/widgets/onboarding_page_widgets/shared/onboarding_page_indicator.dart';
 
@@ -88,7 +87,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          const Positioned.fill(child: BrandMeshBackground()),
+          Positioned.fill(
+            child: Image.asset(
+              AppAssets.onboardingBackground,
+              fit: BoxFit.cover,
+            ),
+          ),
           LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               final double scale = constraints.maxHeight / _designHeight;

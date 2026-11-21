@@ -7,10 +7,9 @@ import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/core/utils/app_motion.dart';
 import 'package:wsidappp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:wsidappp/features/auth/presentation/cubit/auth_state.dart';
-import 'package:wsidappp/shared/widgets/brand_mesh_background.dart';
+import 'package:wsidappp/shared/widgets/wsid_button.dart';
+import 'package:wsidappp/shared/widgets/wsid_text_field.dart';
 import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/shared/auth_mode_switch.dart';
-import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/shared/auth_text_field.dart';
-import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/shared/auth_underlined_link.dart';
 
 /// Login and register screen aligned with Figma frames `181:379` / `18:5`.
 class AuthPage extends StatefulWidget {
@@ -76,7 +75,12 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          const Positioned.fill(child: BrandMeshBackground()),
+          Positioned.fill(
+            child: Image.asset(
+              AppAssets.authBackground,
+              fit: BoxFit.cover,
+            ),
+          ),
           SafeArea(
             child: BlocConsumer<AuthCubit, AuthState>(
               listener: (BuildContext context, AuthState state) {
@@ -147,7 +151,7 @@ class _AuthPageState extends State<AuthPage> {
                                 ),
                                 const SizedBox(height: 32),
                                 if (_isSignUp) ...<Widget>[
-                                  AuthTextField(
+                                  WsidTextField(
                                     controller: _nameController,
                                     label: l10n.nameLabel,
                                     hintText: l10n.nameFieldPlaceholder,
@@ -162,7 +166,7 @@ class _AuthPageState extends State<AuthPage> {
                                   ),
                                   const SizedBox(height: 24),
                                 ],
-                                AuthTextField(
+                                WsidTextField(
                                   controller: _emailController,
                                   label: l10n.emailLabel,
                                   hintText: l10n.emailFieldPlaceholder,
@@ -180,7 +184,7 @@ class _AuthPageState extends State<AuthPage> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: <Widget>[
-                                    AuthTextField(
+                                    WsidTextField(
                                       controller: _passwordController,
                                       label: _isSignUp
                                           ? l10n.createPasswordLabel
@@ -203,9 +207,13 @@ class _AuthPageState extends State<AuthPage> {
                                       },
                                     ),
                                     if (!_isSignUp)
-                                      AuthUnderlinedLink(
-                                        label: l10n.forgotPassword,
-                                        onTap: () {
+                                      Align(
+                                        alignment: AlignmentDirectional.centerEnd,
+                                        child: WsidButton(
+                                          label: l10n.forgotPassword,
+                                          variant: WsidButtonVariant.link,
+                                          size: WsidButtonSize.small,
+                                          onPressed: () {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(
@@ -214,43 +222,20 @@ class _AuthPageState extends State<AuthPage> {
                                               ),
                                             ),
                                           );
-                                        },
+                                          },
+                                        ),
                                       ),
                                   ],
                                 ),
                                 const SizedBox(height: 24),
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 40,
-                                  child: FilledButton(
-                                    onPressed: isLoading ? null : _submit,
-                                    style: FilledButton.styleFrom(
-                                      backgroundColor: brand.primaryAction,
-                                      foregroundColor: brand.onPrimaryAction,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: context.radius.lg,
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                        vertical: 12,
-                                      ),
-                                      textStyle: context.typo.title1Bold,
-                                    ),
-                                    child: isLoading
-                                        ? SizedBox(
-                                            height: 20,
-                                            width: 20,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                              color: brand.onPrimaryAction,
-                                            ),
-                                          )
-                                        : Text(
-                                            _isSignUp
-                                                ? l10n.createAccountButton
-                                                : l10n.logInButton,
-                                          ),
-                                  ),
+                                WsidButton(
+                                  onPressed: isLoading ? null : _submit,
+                                  label: _isSignUp
+                                      ? l10n.createAccountButton
+                                      : l10n.logInButton,
+                                  size: WsidButtonSize.large,
+                                  isLoading: isLoading,
+                                  isExpanded: true,
                                 ),
                                 const SizedBox(height: 16),
                                 AuthModeSwitch(

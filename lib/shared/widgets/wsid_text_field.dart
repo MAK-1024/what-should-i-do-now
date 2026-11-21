@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:wsidappp/config/theme/theme_extensions.dart';
-import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/shared/auth_field_label.dart';
 
-/// Bordered auth input with leading icon (Figma `input field` component).
-class AuthTextField extends StatelessWidget {
-  const AuthTextField({
+import 'package:wsidappp/config/theme/theme_extensions.dart';
+import 'package:wsidappp/shared/widgets/wsid_field_label.dart';
+
+/// Bordered app-wide text input with an optional required label.
+class WsidTextField extends StatelessWidget {
+  const WsidTextField({
     super.key,
     required this.controller,
-    required this.label,
+    this.label,
     required this.hintText,
     required this.prefixIcon,
     this.keyboardType,
@@ -16,10 +17,13 @@ class AuthTextField extends StatelessWidget {
     this.onToggleObscure,
     this.onFieldSubmitted,
     this.validator,
+    this.showLabel = true,
+    this.onChanged,
+    this.suffixIcon,
   });
 
   final TextEditingController controller;
-  final String label;
+  final String? label;
   final String hintText;
   final IconData prefixIcon;
   final TextInputType? keyboardType;
@@ -28,6 +32,9 @@ class AuthTextField extends StatelessWidget {
   final VoidCallback? onToggleObscure;
   final void Function(String)? onFieldSubmitted;
   final String? Function(String?)? validator;
+  final bool showLabel;
+  final void Function(String)? onChanged;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +45,10 @@ class AuthTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        AuthFieldLabel(label: label),
+        if (showLabel) WsidFieldLabel(label: label ?? ''),
         TextFormField(
           controller: controller,
+          onChanged: onChanged,
           keyboardType: keyboardType,
           textInputAction: textInputAction,
           obscureText: obscureText,
@@ -57,9 +65,10 @@ class AuthTextField extends StatelessWidget {
               vertical: 16,
             ),
             prefixIcon: Icon(prefixIcon, color: brand.iconMuted, size: 24),
-            suffixIcon: onToggleObscure == null
-                ? null
-                : IconButton(
+            suffixIcon: suffixIcon ??
+                (onToggleObscure == null
+                    ? null
+                    : IconButton(
                     icon: Icon(
                       obscureText
                           ? Icons.visibility_off_outlined
@@ -68,7 +77,7 @@ class AuthTextField extends StatelessWidget {
                       size: 24,
                     ),
                     onPressed: onToggleObscure,
-                  ),
+                  )),
             border: OutlineInputBorder(
               borderRadius: context.radius.md,
               borderSide: BorderSide(color: brand.inputBorder),

@@ -7,55 +7,63 @@ import 'package:wsidappp/core/utils/app_motion.dart';
 import 'package:wsidappp/features/categories/domain/entities/category.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_cubit.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_state.dart';
+import 'package:wsidappp/core/constants/category_appearance.dart';
 import 'package:wsidappp/features/tasks/domain/entities/task.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_cubit.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_state.dart';
-import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/cards/task_list_tile.dart';
+import 'package:wsidappp/shared/widgets/wsid_task_row.dart';
 import 'package:wsidappp/features/tasks/presentation/task_flow_navigation.dart';
-import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/shared/task_status_badge.dart';
 
 /// Section header (status + count) and the grouped card of filtered tasks.
 class TaskGroupListSection extends StatelessWidget {
-  const TaskGroupListSection({super.key});
+  const TaskGroupListSection({
+    super.key,
+    this.priorityFilter,
+    this.durationRange,
+  });
+
+  final TaskPriority? priorityFilter;
+  final RangeValues? durationRange;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final Map<String, String> categoryNames =
-        context.select<CategoryCubit, Map<String, String>>(
+    final Map<String, Category> categoriesById =
+        context.select<CategoryCubit, Map<String, Category>>(
       (CategoryCubit cubit) => cubit.state.maybeWhen(
-        loaded: (List<Category> categories, _) => <String, String>{
-          for (final Category category in categories) category.id: category.name,
+        loaded: (List<Category> categories, _) => <String, Category>{
+          for (final Category category in categories) category.id: category,
         },
-        orElse: () => const <String, String>{},
+        orElse: () => const <String, Category>{},
       ),
     );
 
     return BlocBuilder<TaskListCubit, TaskListState>(
       builder: (BuildContext context, TaskListState state) {
         return state.maybeWhen(
-          loaded: (_, _, TaskStatus? filterStatus, _, _, _) {
-            final List<Task> visible = state.visibleTasks;
+          loaded: (_, _, _, _, _, _) {
+            final List<Task> visible = state.visibleTasks.where((Task task) {
+              if (task.status != TaskStatus.pending) return false;
+              if (priorityFilter != null &&
+                  task.priority != priorityFilter) {
+                return false;
+              }
+              if (durationRange != null &&
+                  (task.estimatedDuration == null ||
+                      task.estimatedDuration! < durationRange!.start ||
+                      task.estimatedDuration! > durationRange!.end)) {
+                return false;
+              }
+              return true;
+            }).toList(growable: false);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        filterStatus?.label(l10n) ?? l10n.all,
-                        style: context.txt.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      l10n.taskCount(visible.length),
-                      style: context.txt.bodyMedium?.copyWith(
-                        color: context.colors.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
+                Text(
+                  l10n.taskCount(visible.length),
+                  style: context.txt.bodyMedium?.copyWith(
+                    color: context.colors.onSurfaceVariant,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 if (visible.isEmpty)
@@ -67,10 +75,21 @@ class TaskGroupListSection extends StatelessWidget {
                       children: <Widget>[
                         for (int i = 0; i < visible.length; i++) ...<Widget>[
                           if (i > 0) const Divider(height: 1, indent: 40),
-                          TaskListTile(
+                          WsidTaskRow(
                             key: ValueKey<String>(visible[i].id),
-                            task: visible[i],
-                            categoryName: categoryNames[visible[i].categoryId],
+                            title: visible[i].title,
+                            categoryName: categoriesById[visible[i].categoryId]
+                                    ?.name ??
+                                l10n.uncategorized,
+                            categoryColor:
+                                CategoryAppearance.colorForHex(
+                              categoriesById[visible[i].categoryId]?.color,
+                            ).iconCircleColor,
+                            categoryIcon:
+                                CategoryAppearance.iconForKey(
+                              categoriesById[visible[i].categoryId]?.icon,
+                            ).icon,
+                            variant: WsidTaskRowVariant.defaultRow,
                             onTap: () => TaskFlowNavigation.openTaskDetails(
                               context,
                               task: visible[i],

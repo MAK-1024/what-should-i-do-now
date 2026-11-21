@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/constants/task_duration_presets.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
-import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/shared/auth_field_label.dart';
+import 'package:wsidappp/shared/widgets/wsid_field_label.dart';
 import 'package:wsidappp/features/categories/domain/entities/category.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_cubit.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_state.dart';
@@ -226,7 +226,7 @@ class _NotesField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        AuthFieldLabel(label: label),
+        WsidFieldLabel(label: label),
         TextFormField(
           controller: controller,
           minLines: 2,
@@ -367,7 +367,7 @@ class _LinkField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        AuthFieldLabel(label: label),
+        WsidFieldLabel(label: label),
         TextFormField(
           controller: controller,
           keyboardType: TextInputType.url,

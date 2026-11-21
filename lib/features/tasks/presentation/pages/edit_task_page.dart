@@ -99,14 +99,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
 
     return Scaffold(
       backgroundColor: context.brand.pageBackground,
-      appBar: CustomAppBar(
+      appBar: WsidAppBar.sub(
         title: l10n.screenEditTask,
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none),
-          ),
-        ],
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(

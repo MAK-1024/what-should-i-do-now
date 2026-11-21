@@ -35,7 +35,7 @@ class _ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: context.l10n.profile, centerTitle: false),
+      appBar: WsidAppBar.main(title: context.l10n.profile),
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listenWhen: (_, ProfileState current) => _actionError(current) != null,
         listener: (BuildContext context, ProfileState state) {

@@ -93,14 +93,8 @@ class TaskDetailsPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: context.brand.pageBackground,
-      appBar: CustomAppBar(
+      appBar: WsidAppBar.sub(
         title: l10n.screenTaskDetails,
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none),
-          ),
-        ],
       ),
       bottomNavigationBar: BlocBuilder<TaskListCubit, TaskListState>(
         builder: (BuildContext context, TaskListState state) {

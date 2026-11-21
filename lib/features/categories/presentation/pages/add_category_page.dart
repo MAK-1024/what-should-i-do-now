@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/constants/category_appearance.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
-import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/shared/auth_text_field.dart';
+import 'package:wsidappp/shared/widgets/wsid_text_field.dart';
 import 'package:wsidappp/features/categories/domain/entities/category.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_cubit.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_state.dart';
@@ -65,14 +65,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
 
     return Scaffold(
       backgroundColor: brand.pageBackground,
-      appBar: CustomAppBar(
+      appBar: WsidAppBar.sub(
         title: l10n.addCategory,
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none),
-          ),
-        ],
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
@@ -107,7 +101,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
           children: <Widget>[
-            AuthTextField(
+            WsidTextField(
               controller: _nameController,
               label: l10n.categoryNameLabel,
               hintText: l10n.categoryNamePlaceholder,

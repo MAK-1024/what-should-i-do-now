@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wsidappp/shared/widgets/wsid_button.dart';
 import 'package:wsidappp/config/theme/app_colors.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
@@ -205,17 +206,11 @@ class _SuggestButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
-      style: FilledButton.styleFrom(
-        minimumSize: const Size(220, 56),
-        textStyle: context.txt.titleMedium?.copyWith(
-          fontWeight: FontWeight.w700,
-        ),
-      ),
+    return WsidButton(
       onPressed: onPressed,
-      child: Text(context.l10n.suggestTask),
-    )
-        .animate()
+      label: context.l10n.suggestTask,
+      size: WsidButtonSize.large,
+    ).animate()
         .fadeIn(
           delay: AppMotion.of(context, AppMotion.staggerStep),
           duration: AppMotion.of(context, AppMotion.medium),

@@ -4,6 +4,7 @@ import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_cubit.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_state.dart';
+import 'package:wsidappp/shared/widgets/wsid_text_field.dart';
 
 /// Rounded search field filtering tasks by title or description.
 class TaskSearchBar extends StatefulWidget {
@@ -34,36 +35,24 @@ class _TaskSearchBarState extends State<TaskSearchBar> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return TextField(
+    return WsidTextField(
       controller: _controller,
+      label: l10n.searchTasks,
+      hintText: l10n.searchTasks,
+      prefixIcon: Icons.search,
       textInputAction: TextInputAction.search,
+      showLabel: false,
       onChanged: context.read<TaskListCubit>().setSearchQuery,
-      decoration: InputDecoration(
-        hintText: l10n.searchTasks,
-        prefixIcon: const Icon(Icons.search),
-        suffixIcon: ValueListenableBuilder<TextEditingValue>(
-          valueListenable: _controller,
-          builder: (BuildContext context, TextEditingValue value, _) {
-            if (value.text.isEmpty) return const SizedBox.shrink();
-            return IconButton(
-              tooltip: l10n.clearSearch,
-              icon: const Icon(Icons.close),
-              onPressed: _clear,
-            );
-          },
-        ),
-        border: OutlineInputBorder(
-          borderRadius: context.radius.full,
-          borderSide: BorderSide(color: context.colors.outlineVariant),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: context.radius.full,
-          borderSide: BorderSide(color: context.colors.outlineVariant),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: context.radius.full,
-          borderSide: BorderSide(color: context.colors.primary, width: 2),
-        ),
+      suffixIcon: ValueListenableBuilder<TextEditingValue>(
+        valueListenable: _controller,
+        builder: (BuildContext context, TextEditingValue value, _) {
+          if (value.text.isEmpty) return const SizedBox.shrink();
+          return IconButton(
+            tooltip: l10n.clearSearch,
+            icon: const Icon(Icons.close),
+            onPressed: _clear,
+          );
+        },
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wsidappp/core/constants/app_assets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -42,7 +43,7 @@ abstract final class AppStartup {
   static Future<void> run() async {
     LicenseRegistry.addLicense(() async* {
       final String license =
-          await rootBundle.loadString('assets/fonts/Tajawal-OFL.txt');
+          await rootBundle.loadString(AppAssets.tajawalOfl);
       yield LicenseEntryWithLineBreaks(<String>['Tajawal'], license);
     });
 

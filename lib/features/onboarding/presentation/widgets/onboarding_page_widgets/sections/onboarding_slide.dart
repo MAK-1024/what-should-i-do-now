@@ -51,7 +51,11 @@ class OnboardingSlide extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: context.typo.h3Bold.copyWith(color: brand.fieldValue),
+              style: context.typo.h3Bold.copyWith(
+                color: context.isLightTheme
+                    ? context.colors.primary
+                    : brand.headlineText,
+              ),
             )
                 .animate(delay: step)
                 .fadeIn(duration: duration, curve: AppMotion.standard)
@@ -60,7 +64,7 @@ class OnboardingSlide extends StatelessWidget {
             Text(
               subtitle,
               textAlign: TextAlign.center,
-              style: context.typo.title2.copyWith(color: brand.mutedText),
+              style: context.screenSubtitleStyle,
             )
                 .animate(delay: step * 2)
                 .fadeIn(duration: duration, curve: AppMotion.standard)

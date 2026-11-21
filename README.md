@@ -1,17 +1,31 @@
-# wsidappp
+# WSID?
 
-A new Flutter project.
+Flutter app for **What Should I Do?** (Supabase backend).
 
-## Getting Started
+## Environment setup (required after clone)
 
-This project is a starting point for a Flutter application.
+The app loads secrets from a **local** `.env` file. That file is **not** in git.
 
-A few resources to get you started if this is your first Flutter project:
+1. Copy the template:
+   ```bash
+   cp .env.example .env
+   ```
+   On Windows (PowerShell):
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+2. Fill in values (ask the project owner or use a team secret store):
+   - `SUPABASE_URL` — Supabase **Project URL**
+   - `SUPABASE_ANON_KEY` — Supabase **anon** / **public** key (not the service_role key)
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+   In [Supabase](https://supabase.com/dashboard): **Project Settings → API**.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. Run the app:
+   ```bash
+   flutter pub get
+   flutter run
+   ```
+
+If `SUPABASE_URL` or `SUPABASE_ANON_KEY` is missing, the app asserts on startup.
+
+**Sharing secrets with teammates:** send the two values over a private channel (DM, password manager, Supabase project invite). Do not paste them into issues, PRs, or chat logs.

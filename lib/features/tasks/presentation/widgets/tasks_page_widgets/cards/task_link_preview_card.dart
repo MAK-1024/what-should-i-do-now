@@ -55,7 +55,7 @@ class TaskLinkPreviewCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: context.isLightTheme
-                      ? context.typo.bodyBold.copyWith(color: brand.headlineText)
+                      ? context.cardTitleStyle
                       : context.txt.titleSmall?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: context.colors.primary,
@@ -65,7 +65,7 @@ class TaskLinkPreviewCard extends StatelessWidget {
                 Text(
                   _domain,
                   style: context.isLightTheme
-                      ? context.typo.caption.copyWith(color: brand.mutedText)
+                      ? context.metaTextStyle
                       : context.txt.bodySmall?.copyWith(
                           color: context.colors.onSurfaceVariant,
                         ),

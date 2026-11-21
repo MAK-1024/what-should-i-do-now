@@ -91,12 +91,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
           onPressed: () => context.push(RouteList.profile),
         ),
         titleWidget: context.isLightTheme
-            ? Text(
-                l10n.categories,
-                style: context.typo.h1Bold.copyWith(
-                  color: context.brand.titleText,
-                ),
-              )
+            ? Text(l10n.categories, style: context.pageTitleStyle)
             : null,
         title: context.isLightTheme ? null : l10n.categories,
         actions: <Widget>[
@@ -150,8 +145,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                                 categories.length,
                                 totalTasks,
                               ),
-                              style: context.typo.caption.copyWith(
-                                color: context.brand.mutedText,
+                              style: context.metaTextStyle.copyWith(
                               ),
                             ),
                           ),

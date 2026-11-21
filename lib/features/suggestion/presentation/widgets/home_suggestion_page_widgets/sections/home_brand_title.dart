@@ -13,11 +13,7 @@ class HomeBrandTitle extends StatelessWidget {
     return Text(
       context.l10n.brandHeader,
       maxLines: 2,
-      style: context.txt.headlineSmall?.copyWith(
-        color: context.colors.primary,
-        fontWeight: FontWeight.w800,
-        height: 1.1,
-      ),
+      style: context.pageTitleStyle.copyWith(height: 1.1),
     )
         .animate()
         .fadeIn(duration: AppMotion.of(context, AppMotion.medium))

@@ -33,7 +33,7 @@ class AuthModeSwitch extends StatelessWidget {
       children: <Widget>[
         Text(
           prompt,
-          style: context.typo.body.copyWith(color: brand.captionMuted),
+          style: context.cardSubtitleStyle,
         ),
         GestureDetector(
           onTap: enabled ? onTap : null,

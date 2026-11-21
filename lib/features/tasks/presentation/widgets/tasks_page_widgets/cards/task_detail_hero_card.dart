@@ -47,15 +47,7 @@ class TaskDetailHeroCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   task.title,
-                  style: context.isLightTheme
-                      ? context.typo.h1Bold.copyWith(
-                          color: brand.headlineText,
-                          fontSize: 20,
-                          height: 1.5,
-                        )
-                      : context.txt.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                  style: context.pageTitleStyle.copyWith(height: 1.5),
                 ),
               ),
             ],

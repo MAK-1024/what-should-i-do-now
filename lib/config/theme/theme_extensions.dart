@@ -24,8 +24,8 @@ extension ThemeContextX on BuildContext {
   /// Figma caption labels (light) vs uppercase settings-style headers (dark).
   TextStyle sectionHeaderStyle({Color? lightColor}) {
     if (isLightTheme) {
-      return typo.captionBold.copyWith(
-        color: lightColor ?? brand.mutedText,
+      return typo.bodyBold.copyWith(
+        color: lightColor ?? brand.sectionLabel,
       );
     }
     return txt.labelMedium!.copyWith(
@@ -37,6 +37,38 @@ extension ThemeContextX on BuildContext {
 
   String sectionHeaderLabel(String label) =>
       isLightTheme ? label : label.toUpperCase();
+
+  /// Primary title under mascots / in cards (matches Home boldness).
+  TextStyle get screenTitleStyle => typo.h1Bold.copyWith(
+        color: isLightTheme ? colors.primary : colors.onSurface,
+        height: 1.2,
+      );
+
+  /// Secondary line directly under [screenTitleStyle].
+  TextStyle get screenSubtitleStyle => typo.bodyBold.copyWith(
+        color: brand.bodyText,
+        height: 1.35,
+      );
+
+  /// Figma flow screen titles (categories, tasks, forms).
+  TextStyle get pageTitleStyle => typo.h1Bold.copyWith(
+        color: isLightTheme ? colors.primary : colors.onSurface,
+      );
+
+  /// Card / list item titles.
+  TextStyle get cardTitleStyle => typo.title2Bold.copyWith(
+        color: brand.headlineText,
+      );
+
+  /// Secondary card copy — readable, not washed out.
+  TextStyle get cardSubtitleStyle => typo.bodyBold.copyWith(
+        color: brand.bodyText,
+      );
+
+  /// Timestamps, counts, tertiary hints.
+  TextStyle get metaTextStyle => typo.captionBold.copyWith(
+        color: brand.mutedText,
+      );
 }
 
 /// Standardized border radius tokens across the design system.

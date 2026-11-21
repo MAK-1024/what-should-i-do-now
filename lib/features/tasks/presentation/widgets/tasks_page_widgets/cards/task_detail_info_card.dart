@@ -66,7 +66,7 @@ class _InfoRow extends StatelessWidget {
               Text(
                 label,
                 style: context.isLightTheme
-                    ? context.typo.body.copyWith(color: brand.mutedText)
+                    ? context.metaTextStyle
                     : context.txt.bodyMedium?.copyWith(
                         color: context.colors.onSurfaceVariant,
                       ),
@@ -75,7 +75,7 @@ class _InfoRow extends StatelessWidget {
               Text(
                 value,
                 style: context.isLightTheme
-                    ? context.typo.bodyBold.copyWith(
+                    ? context.cardSubtitleStyle.copyWith(
                         color: valueColor ?? brand.headlineText,
                       )
                     : context.txt.titleSmall?.copyWith(

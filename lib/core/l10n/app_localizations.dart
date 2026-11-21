@@ -460,7 +460,7 @@ class AppLocalizations {
       'getStarted': 'get started',
       // Auth — Login
       'welcomeBack': 'welcome back',
-      'logInSubtitle': 'log in to pick up where you left off.',
+      'logInSubtitle': 'log in to pick up where you left off',
       'emailLabel': 'email',
       'passwordLabel': 'password',
       'forgotPassword': 'forgot password?',
@@ -469,7 +469,7 @@ class AppLocalizations {
       'createAccountLink': 'create account',
       // Auth — Register
       'createAccountTitle': 'create your account',
-      'createAccountSubtitle': 'save the things you keep putting off.',
+      'createAccountSubtitle': 'save the things you keep putting off',
       'nameLabel': 'name',
       'createPasswordLabel': 'create a password',
       'createAccountButton': 'create account',
@@ -667,7 +667,7 @@ class AppLocalizations {
       'getStarted': 'ابدأ الآن',
       // Auth — Login
       'welcomeBack': 'أهلاً بعودتك',
-      'logInSubtitle': 'سجّل دخولك لتكمل من حيث توقفت.',
+      'logInSubtitle': 'سجّل دخولك لتكمل من حيث توقفت',
       'emailLabel': 'البريد الإلكتروني',
       'passwordLabel': 'كلمة المرور',
       'forgotPassword': 'نسيت كلمة المرور؟',
@@ -676,7 +676,7 @@ class AppLocalizations {
       'createAccountLink': 'إنشاء حساب',
       // Auth — Register
       'createAccountTitle': 'أنشئ حسابك',
-      'createAccountSubtitle': 'احفظ الأشياء التي تؤجلها دائماً.',
+      'createAccountSubtitle': 'احفظ الأشياء التي تؤجلها دائماً',
       'nameLabel': 'الاسم',
       'createPasswordLabel': 'أنشئ كلمة مرور',
       'createAccountButton': 'إنشاء حساب',
@@ -879,7 +879,7 @@ class AppLocalizations {
       'getStarted': 'inizia',
       // Auth — Login
       'welcomeBack': 'bentornato',
-      'logInSubtitle': 'accedi per riprendere da dove avevi lasciato.',
+      'logInSubtitle': 'accedi per riprendere da dove avevi lasciato',
       'emailLabel': 'email',
       'passwordLabel': 'password',
       'forgotPassword': 'password dimenticata?',
@@ -888,7 +888,7 @@ class AppLocalizations {
       'createAccountLink': 'crea account',
       // Auth — Register
       'createAccountTitle': 'crea il tuo account',
-      'createAccountSubtitle': 'salva le cose che continui a rimandare.',
+      'createAccountSubtitle': 'salva le cose che continui a rimandare',
       'nameLabel': 'nome',
       'createPasswordLabel': 'crea una password',
       'createAccountButton': 'crea account',

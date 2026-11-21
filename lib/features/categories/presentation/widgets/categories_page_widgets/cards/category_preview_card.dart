@@ -48,14 +48,14 @@ class CategoryPreviewCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: context.isLightTheme
-                  ? context.typo.title2Bold.copyWith(color: brand.headlineText)
+                  ? context.cardTitleStyle
                   : context.txt.titleSmall?.copyWith(fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 2),
             Text(
               l10n.taskCount(taskCount),
               style: context.isLightTheme
-                  ? context.typo.caption.copyWith(color: brand.mutedText)
+                  ? context.metaTextStyle
                   : context.txt.bodySmall?.copyWith(
                       color: context.colors.onSurfaceVariant,
                     ),

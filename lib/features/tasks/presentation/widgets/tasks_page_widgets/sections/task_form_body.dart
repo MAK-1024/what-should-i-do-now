@@ -339,7 +339,7 @@ class _TaskNameField extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           helperText,
-          style: context.typo.caption.copyWith(color: brand.captionMuted),
+          style: context.metaTextStyle,
         ),
       ],
     );

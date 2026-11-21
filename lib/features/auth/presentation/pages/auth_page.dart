@@ -8,7 +8,6 @@ import 'package:wsidappp/core/utils/app_motion.dart';
 import 'package:wsidappp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:wsidappp/features/auth/presentation/cubit/auth_state.dart';
 import 'package:wsidappp/shared/widgets/brand_mesh_background.dart';
-import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/sections/auth_legal_disclaimer.dart';
 import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/shared/auth_mode_switch.dart';
 import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/shared/auth_text_field.dart';
 import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/shared/auth_underlined_link.dart';
@@ -137,26 +136,14 @@ class _AuthPageState extends State<AuthPage> {
                                       ? l10n.createAccountTitle
                                       : l10n.welcomeBack,
                                   textAlign: TextAlign.center,
-                                  style: context.isLightTheme
-                                      ? context.typo.h1Bold.copyWith(
-                                          color: brand.fieldValue,
-                                        )
-                                      : context.txt.headlineSmall?.copyWith(
-                                          fontWeight: FontWeight.w800,
-                                        ),
+                                  style: context.screenTitleStyle,
                                 ),
                                 Text(
                                   _isSignUp
                                       ? l10n.createAccountSubtitle
                                       : l10n.logInSubtitle,
                                   textAlign: TextAlign.center,
-                                  style: context.isLightTheme
-                                      ? context.typo.title1.copyWith(
-                                          color: brand.mutedText,
-                                        )
-                                      : context.txt.bodyMedium?.copyWith(
-                                          color: context.colors.onSurfaceVariant,
-                                        ),
+                                  style: context.screenSubtitleStyle,
                                 ),
                                 const SizedBox(height: 32),
                                 if (_isSignUp) ...<Widget>[
@@ -265,8 +252,6 @@ class _AuthPageState extends State<AuthPage> {
                                           ),
                                   ),
                                 ),
-                                const SizedBox(height: 16),
-                                const AuthLegalDisclaimer(),
                                 const SizedBox(height: 16),
                                 AuthModeSwitch(
                                   prompt: _isSignUp

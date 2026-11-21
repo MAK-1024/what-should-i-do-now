@@ -7,6 +7,8 @@ import 'package:wsidappp/config/routes/route_list.dart';
 import 'package:wsidappp/core/di/injection.dart';
 import 'package:wsidappp/features/auth/domain/repositories/auth_repository.dart';
 import 'package:wsidappp/features/auth/presentation/pages/auth_page.dart';
+import 'package:wsidappp/features/onboarding/presentation/pages/onboarding_page.dart';
+import 'package:wsidappp/features/onboarding/presentation/pages/splash_page.dart';
 import 'package:wsidappp/features/categories/presentation/pages/categories_page.dart';
 import 'package:wsidappp/features/profile/presentation/pages/profile_page.dart';
 import 'package:wsidappp/features/suggestion/presentation/pages/home_suggestion_page.dart';
@@ -33,7 +35,7 @@ class GoRouterRefreshStream extends ChangeNotifier {
 /// Application router configuration using [GoRouter] with authentication guards and app shell.
 abstract final class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: RouteList.home,
+    initialLocation: RouteList.splash,
     debugLogDiagnostics: true,
     refreshListenable: GoRouterRefreshStream(
       getIt<AuthRepository>().authStateChanges,
@@ -42,6 +44,14 @@ abstract final class AppRouter {
       final bool isAuthenticated =
           getIt<SupabaseClient>().auth.currentSession != null;
       final bool isAuthRoute = state.matchedLocation == RouteList.auth;
+      final bool isSplashRoute = state.matchedLocation == RouteList.splash;
+      final bool isOnboardingRoute =
+          state.matchedLocation == RouteList.onboarding;
+
+      // Allow splash and onboarding to be accessed without auth.
+      if (isSplashRoute || isOnboardingRoute) {
+        return null;
+      }
 
       if (!isAuthenticated && !isAuthRoute) {
         return RouteList.auth;
@@ -54,6 +64,18 @@ abstract final class AppRouter {
       return null;
     },
     routes: <RouteBase>[
+      GoRoute(
+        path: RouteList.splash,
+        name: 'splash',
+        builder: (BuildContext context, GoRouterState state) =>
+            const SplashPage(),
+      ),
+      GoRoute(
+        path: RouteList.onboarding,
+        name: 'onboarding',
+        builder: (BuildContext context, GoRouterState state) =>
+            const OnboardingPage(),
+      ),
       GoRoute(
         path: RouteList.auth,
         name: 'auth',

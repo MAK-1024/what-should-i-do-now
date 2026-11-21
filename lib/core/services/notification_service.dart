@@ -119,20 +119,28 @@ class NotificationService {
     _isInitialized = true;
   }
 
-  /// Prompts for notification permissions automatically on the very first app launch.
-  ///
-  /// - If granted: marks app settings toggle ON.
-  /// - If denied: marks app settings toggle OFF.
-  ///
-  /// Subsequent launches will not trigger this automatic prompt.
+  /// Whether the in-app first-launch notification explainer still needs to run.
+  bool shouldPromptFirstLaunchPermission() {
+    return !(_prefs.getBool(_keyFirstLaunchPrompted) ?? false);
+  }
+
+  /// Records the user's choice from [showNotificationPermissionDialog] and
+  /// optionally requests OS permission when they tap allow.
+  Future<void> completeFirstLaunchPermissionPrompt({
+    required bool userWantsNotifications,
+  }) async {
+    await _prefs.setBool(_keyFirstLaunchPrompted, true);
+    if (!userWantsNotifications) {
+      await _prefs.setBool(_keyNotificationsEnabled, false);
+      return;
+    }
+    final bool granted = await requestPermissions();
+    await _prefs.setBool(_keyNotificationsEnabled, granted);
+  }
+
   Future<bool> checkAndRequestFirstLaunchPermission() async {
-    final bool hasPrompted = _prefs.getBool(_keyFirstLaunchPrompted) ?? false;
-    if (!hasPrompted) {
-      final PermissionStatus status = await Permission.notification.request();
-      await _prefs.setBool(_keyFirstLaunchPrompted, true);
-      final bool granted = status.isGranted;
-      await _prefs.setBool(_keyNotificationsEnabled, granted);
-      return granted;
+    if (shouldPromptFirstLaunchPermission()) {
+      await completeFirstLaunchPermissionPrompt(userWantsNotifications: true);
     }
     return areNotificationsEnabled();
   }

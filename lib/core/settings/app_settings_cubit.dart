@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wsidappp/core/bootstrap/app_startup.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/core/services/notification_service.dart';
 
@@ -57,12 +58,28 @@ class AppSettingsState extends Equatable {
 @lazySingleton
 class AppSettingsCubit extends Cubit<AppSettingsState> {
   AppSettingsCubit(this._prefs, this._notificationService)
-      : super(AppSettingsState.defaults);
+      : super(_initialState(_prefs));
 
   final SharedPreferences _prefs;
   final NotificationService _notificationService;
 
-  static const String _keyTheme = 'app_theme_mode_name';
+  static const String _keyTheme = AppStartup.themePreferenceKey;
+
+  static AppSettingsState _initialState(SharedPreferences prefs) {
+    final String? languageCode = prefs.getString(_keyLanguage);
+    return AppSettingsState.defaults.copyWith(
+      themeMode: AppStartup.readThemeMode(prefs),
+      locale: languageCode != null &&
+              AppLocalizations.isSupported(languageCode)
+          ? Locale(languageCode)
+          : AppSettingsState.defaults.locale,
+      notificationsEnabled: prefs.getBool(_keyNotifications) ?? false,
+      reminderHour:
+          prefs.getInt(_keyReminderHour) ?? AppSettingsState.defaults.reminderHour,
+      reminderMinute: prefs.getInt(_keyReminderMinute) ??
+          AppSettingsState.defaults.reminderMinute,
+    );
+  }
   static const String _keyLanguage = 'app_language_code';
   static const String _keyNotifications = 'app_notifications_enabled';
   static const String _keyReminderHour = 'app_reminder_hour';

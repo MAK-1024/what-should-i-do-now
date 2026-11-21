@@ -18,6 +18,27 @@ abstract final class AppColors {
   static const Color accent = Color(0xFFD97706);
   static const Color accentContainer = Color(0xFFFEF3C7);
 
+  // ── Foundation palette (Figma design system) ──────────────────────────────
+  static const Color green800 = Color(0xFF324B3D);
+  static const Color green500 = Color(0xFF5B896F);
+  static const Color green600 = Color(0xFF537D65);
+  static const Color green700 = Color(0xFF41614F);
+  static const Color green300 = Color(0xFF91B09F);
+  static const Color green200 = Color(0xFFB4C9BD);
+  static const Color green100 = Color(0xFFCCDAD2);
+  static const Color green50 = Color(0xFFEFF3F1);
+  static const Color grey900 = Color(0xFF2D3036);
+  static const Color grey700 = Color(0xFF4C515B);
+  static const Color grey600 = Color(0xFF616874);
+  static const Color grey50 = Color(0xFFF0F1F2);
+  static const Color grey500 = Color(0xFF6B7280);
+  static const Color grey300 = Color(0xFF9CA1AA);
+  static const Color greyNeutral = Color(0xFF616161);
+  static const Color inputOutline = Color(0xFFEAECF0);
+
+  /// Teal-blue end stop of the blurred background glows.
+  static const Color glowBlue = Color(0xFF5085A4);
+
   // ── Light Backgrounds & Surfaces ──────────────────────────────────────────
   static const Color background = Color(0xFFF8F9FA);
   static const Color surface = Color(0xFFFFFFFF);
@@ -49,6 +70,12 @@ abstract final class AppColors {
   static const Color errorContainer = Color(0xFFFEE2E2);
   static const Color onError = Color(0xFFFFFFFF);
   static const Color success = Color(0xFF10B981);
+
+  static const Color warning700 = Color(0xFF98801F);
+  static const Color warning50 = Color(0xFFFBF8EA);
+  static const Color error800 = Color(0xFF8C352A);
+  static const Color error700 = Color(0xFFB54536);
+  static const Color error500 = Color(0xFFFF614C);
 
   // ── Category Preset Palette ───────────────────────────────────────────────
   static const Color categoryGreen = primary;

@@ -4,7 +4,7 @@ import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_cubit.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_cubit.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_state.dart';
-import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/dialogs/create_task_sheet.dart';
+import 'package:wsidappp/features/tasks/presentation/task_flow_navigation.dart';
 import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/sections/task_category_filter_chips.dart';
 import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/sections/task_group_list_section.dart';
 import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/sections/task_search_bar.dart';
@@ -33,13 +33,7 @@ class _TasksPageState extends State<TasksPage> {
         context.read<CategoryCubit>().loadCategories(),
       ]);
 
-  void _openCreateTaskSheet() {
-    CreateTaskSheet.show(
-      context,
-      taskListCubit: context.read<TaskListCubit>(),
-      categoryCubit: context.read<CategoryCubit>(),
-    );
-  }
+  void _openCreateTask() => TaskFlowNavigation.openAddTask(context);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +62,7 @@ class _TasksPageState extends State<TasksPage> {
               children: <Widget>[
                 Padding(
                   padding: _hPadding,
-                  child: TasksHeaderSection(onAddTask: _openCreateTaskSheet),
+                  child: TasksHeaderSection(onAddTask: _openCreateTask),
                 ),
                 const SizedBox(height: 20),
                 const Padding(padding: _hPadding, child: TaskSearchBar()),

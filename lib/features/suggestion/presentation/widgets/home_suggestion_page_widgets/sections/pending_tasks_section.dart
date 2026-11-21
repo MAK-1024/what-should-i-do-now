@@ -14,7 +14,7 @@ import 'package:wsidappp/features/suggestion/presentation/widgets/home_suggestio
 import 'package:wsidappp/features/tasks/domain/entities/task.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_cubit.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_state.dart';
-import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/dialogs/task_details_sheet.dart';
+import 'package:wsidappp/features/tasks/presentation/task_flow_navigation.dart';
 
 /// "Pending" preview listing the next few pending tasks with a link to the
 /// full backlog.
@@ -23,15 +23,10 @@ class PendingTasksSection extends StatelessWidget {
 
   static const int _maxVisible = 5;
 
-  void _openDetails(BuildContext context, Task task) {
+  Future<void> _openDetails(BuildContext context, Task task) async {
     final SuggestionCubit suggestionCubit = context.read<SuggestionCubit>();
-    TaskDetailsSheet.show(
-      context,
-      task: task,
-      taskListCubit: context.read<TaskListCubit>(),
-      categoryCubit: context.read<CategoryCubit>(),
-      onTaskChanged: suggestionCubit.checkActiveTask,
-    );
+    await TaskFlowNavigation.openTaskDetails(context, task: task);
+    if (context.mounted) suggestionCubit.checkActiveTask();
   }
 
   @override

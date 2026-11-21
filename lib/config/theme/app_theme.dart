@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wsidappp/config/theme/app_colors.dart';
+import 'package:wsidappp/config/theme/app_typography.dart';
 
 // ── Shared component shapes & styles ─────────────────────────────────────────
 
@@ -42,12 +43,6 @@ ThemeData buildLightTheme() {
 
   return _buildBase(colorScheme).copyWith(
     scaffoldBackgroundColor: AppColors.background,
-    navigationBarTheme: const NavigationBarThemeData(
-      backgroundColor: AppColors.surface,
-      elevation: 2,
-      indicatorColor: AppColors.primaryContainer,
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-    ),
   );
 }
 
@@ -82,12 +77,6 @@ ThemeData buildDarkTheme() {
 
   return _buildBase(colorScheme).copyWith(
     scaffoldBackgroundColor: AppColors.darkBackground,
-    navigationBarTheme: const NavigationBarThemeData(
-      backgroundColor: AppColors.darkSurface,
-      elevation: 2,
-      indicatorColor: AppColors.primaryContainerDark,
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-    ),
   );
 }
 
@@ -96,10 +85,17 @@ ThemeData buildDarkTheme() {
 ThemeData _buildBase(ColorScheme colorScheme) {
   final outlineColor = colorScheme.outlineVariant;
   final surfaceColor = colorScheme.surface;
+  final onSurface = colorScheme.onSurface;
+  final textTheme = ThemeTypography.materialTextTheme(onSurface);
+  const typo = ThemeTypography();
+  final buttonLabel = typo.bodyBold.copyWith(color: colorScheme.onPrimary);
 
   return ThemeData(
     useMaterial3: true,
+    fontFamily: ThemeTypography.fontFamily,
     colorScheme: colorScheme,
+    textTheme: textTheme,
+    primaryTextTheme: textTheme,
     cardTheme: CardThemeData(
       elevation: 0,
       color: surfaceColor,
@@ -111,6 +107,9 @@ ThemeData _buildBase(ColorScheme colorScheme) {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: surfaceColor,
+      hintStyle: typo.body.copyWith(color: colorScheme.outline),
+      labelStyle: typo.captionBold.copyWith(color: onSurface),
+      floatingLabelStyle: typo.captionBold.copyWith(color: colorScheme.primary),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: _inputRadius,
@@ -134,40 +133,59 @@ ThemeData _buildBase(ColorScheme colorScheme) {
       style: FilledButton.styleFrom(
         shape: const StadiumBorder(),
         padding: _buttonPadding,
+        textStyle: buttonLabel,
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
         padding: _buttonPadding,
+        textStyle: buttonLabel,
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         shape: const StadiumBorder(),
         padding: _buttonPadding,
+        textStyle: typo.bodyBold,
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         shape: const StadiumBorder(),
         padding: _buttonPadding,
+        textStyle: typo.bodyBold,
       ),
     ),
     chipTheme: ChipThemeData(
       shape: const StadiumBorder(),
       side: BorderSide(color: outlineColor),
+      labelStyle: typo.bodyBold.copyWith(color: onSurface),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: surfaceColor,
+      elevation: 2,
+      indicatorColor: colorScheme.primaryContainer,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+      labelTextStyle: WidgetStateProperty.resolveWith((states) {
+        final base = typo.caption.copyWith(color: onSurface);
+        if (states.contains(WidgetState.selected)) {
+          return typo.captionBold.copyWith(color: colorScheme.primary);
+        }
+        return base;
+      }),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      selectedLabelStyle: typo.captionBold,
+      unselectedLabelStyle: typo.caption,
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: surfaceColor,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       centerTitle: false,
-      titleTextStyle: TextStyle(
-        color: colorScheme.onSurface,
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-      ),
+      titleTextStyle: typo.h1Bold.copyWith(color: onSurface),
+      toolbarTextStyle: typo.title1Bold.copyWith(color: onSurface),
       iconTheme: IconThemeData(color: colorScheme.onSurface),
     ),
   );

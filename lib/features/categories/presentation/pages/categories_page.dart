@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wsidappp/config/theme/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wsidappp/config/routes/route_list.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/features/categories/domain/entities/category.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_cubit.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_state.dart';
-import 'package:wsidappp/features/categories/presentation/widgets/categories_page_widgets/cards/category_tile.dart';
-import 'package:wsidappp/features/categories/presentation/widgets/categories_page_widgets/dialogs/create_category_sheet.dart';
+import 'package:wsidappp/features/categories/presentation/pages/add_category_page.dart';
+import 'package:wsidappp/features/categories/presentation/widgets/categories_page_widgets/cards/category_add_grid_card.dart';
+import 'package:wsidappp/features/categories/presentation/widgets/categories_page_widgets/cards/category_grid_card.dart';
+import 'package:wsidappp/features/tasks/domain/entities/task.dart';
+import 'package:wsidappp/features/tasks/presentation/cubit/task_list_cubit.dart';
+import 'package:wsidappp/features/tasks/presentation/cubit/task_list_state.dart';
 import 'package:wsidappp/shared/widgets/custom_app_bar.dart';
 
-/// Categories management page providing category creation, listing, and deletion.
+/// Categories grid (`332:1566`) with add-category flow (`337:1912`).
 class CategoriesPage extends StatefulWidget {
   const CategoriesPage({super.key});
 
@@ -23,60 +28,54 @@ class _CategoriesPageState extends State<CategoriesPage> {
   void initState() {
     super.initState();
     context.read<CategoryCubit>().loadCategories();
+    context.read<TaskListCubit>().loadTasks();
   }
 
-  @override
-  Widget build(BuildContext context) => const _CategoriesView();
-}
-
-class _CategoriesView extends StatelessWidget {
-  const _CategoriesView();
-
-  void _openCreateSheet(BuildContext context) {
-    final cubit = context.read<CategoryCubit>();
-    CreateCategorySheet.show(context, cubit);
-  }
-
-  Widget _buildEmptyState(BuildContext context) {
-    final l10n = context.l10n;
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const Icon(
-              Icons.folder_open_outlined,
-              size: 64,
-              color: AppColors.textMuted,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.noCategoriesTitle,
-              style: context.txt.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              l10n.noCategoriesBody,
-              textAlign: TextAlign.center,
-              style: context.txt.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: 24),
-            FilledButton.icon(
-              icon: const Icon(Icons.add),
-              label: Text(l10n.addCategory),
-              onPressed: () => _openCreateSheet(context),
-            ),
-          ],
+  void _openAddCategory(BuildContext context) {
+    Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (_) => BlocProvider<CategoryCubit>.value(
+          value: context.read<CategoryCubit>(),
+          child: const AddCategoryPage(),
         ),
       ),
     );
   }
+
+  Future<void> _confirmDelete(
+    BuildContext context,
+    Category category,
+    CategoryCubit cubit,
+  ) async {
+    final l10n = context.l10n;
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: dialogContext.radius.lg),
+          title: Text(l10n.deleteCategory),
+          content: Text(l10n.deleteCategoryConfirm(category.name)),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: dialogContext.colors.error,
+              ),
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: Text(l10n.delete),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed == true) await cubit.deleteCategory(category.id);
+  }
+
+  int _taskCountForCategory(String categoryId, List<Task> tasks) =>
+      tasks.where((Task t) => t.categoryId == categoryId).length;
 
   @override
   Widget build(BuildContext context) {
@@ -84,14 +83,26 @@ class _CategoriesView extends StatelessWidget {
     final cubit = context.read<CategoryCubit>();
 
     return Scaffold(
+      backgroundColor: context.brand.pageBackground,
       appBar: CustomAppBar(
-        title: l10n.categories,
         showBackButton: false,
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () => context.push(RouteList.profile),
+        ),
+        titleWidget: context.isLightTheme
+            ? Text(
+                l10n.categories,
+                style: context.typo.h1Bold.copyWith(
+                  color: context.brand.titleText,
+                ),
+              )
+            : null,
+        title: context.isLightTheme ? null : l10n.categories,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: l10n.addCategory,
-            onPressed: () => _openCreateSheet(context),
+            icon: const Icon(Icons.notifications_none),
+            onPressed: () {},
           ),
         ],
       ),
@@ -111,43 +122,88 @@ class _CategoriesView extends StatelessWidget {
         builder: (BuildContext context, CategoryState state) {
           return state.when(
             initial: () => const SizedBox.shrink(),
-            loading: () => const Center(
-              child: CircularProgressIndicator(),
-            ),
+            loading: () => const Center(child: CircularProgressIndicator()),
             loaded: (List<Category> categories, _) {
-              if (categories.isEmpty) {
-                return _buildEmptyState(context);
-              }
-              return RefreshIndicator(
-                onRefresh: () => cubit.loadCategories(),
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  itemCount: categories.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return CategoryTile(
-                      category: categories[index],
-                      categoryCubit: cubit,
-                    );
-                  },
-                ),
+              return BlocBuilder<TaskListCubit, TaskListState>(
+                builder: (BuildContext context, TaskListState taskState) {
+                  final List<Task> tasks = taskState.maybeWhen(
+                    loaded: (List<Task> items, _, _, _, _, _) => items,
+                    orElse: () => const <Task>[],
+                  );
+                  final int totalTasks = tasks.length;
+
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      final TaskListCubit taskListCubit =
+                          context.read<TaskListCubit>();
+                      await cubit.loadCategories();
+                      await taskListCubit.loadTasks();
+                    },
+                    child: CustomScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: <Widget>[
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                          sliver: SliverToBoxAdapter(
+                            child: Text(
+                              l10n.categoriesSummary(
+                                categories.length,
+                                totalTasks,
+                              ),
+                              style: context.typo.caption.copyWith(
+                                color: context.brand.mutedText,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                          sliver: SliverGrid(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16,
+                              childAspectRatio: 0.92,
+                            ),
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                if (index < categories.length) {
+                                  final Category category = categories[index];
+                                  return CategoryGridCard(
+                                    category: category,
+                                    taskCount: _taskCountForCategory(
+                                      category.id,
+                                      tasks,
+                                    ),
+                                    onLongPress: () => _confirmDelete(
+                                      context,
+                                      category,
+                                      cubit,
+                                    ),
+                                  );
+                                }
+                                return CategoryAddGridCard(
+                                  onTap: () => _openAddCategory(context),
+                                );
+                              },
+                              childCount: categories.length + 1,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               );
             },
             error: (String message) => Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(
-                    Icons.error_outline,
-                    size: 48,
-                    color: context.colors.error,
-                  ),
+                  Icon(Icons.error_outline, size: 48, color: context.colors.error),
                   const SizedBox(height: 12),
-                  Text(
-                    message,
-                    style: context.txt.titleMedium?.copyWith(
-                      color: context.colors.error,
-                    ),
-                  ),
+                  Text(message, style: context.txt.titleMedium),
                   const SizedBox(height: 16),
                   FilledButton(
                     onPressed: () => cubit.loadCategories(),

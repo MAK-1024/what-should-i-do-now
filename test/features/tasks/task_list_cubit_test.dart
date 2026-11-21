@@ -123,6 +123,18 @@ class _FakeNotificationService implements NotificationService {
 
   @override
   Future<bool> requestPermissionOrOpenSettings() async => true;
+
+  @override
+  Future<void> completeFirstLaunchPermissionPrompt({required bool userWantsNotifications}) {
+    // TODO: implement completeFirstLaunchPermissionPrompt
+    throw UnimplementedError();
+  }
+
+  @override
+  bool shouldPromptFirstLaunchPermission() {
+    // TODO: implement shouldPromptFirstLaunchPermission
+    throw UnimplementedError();
+  }
 }
 
 TaskListCubit _buildCubit(

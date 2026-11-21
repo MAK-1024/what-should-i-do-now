@@ -30,6 +30,21 @@ extension TaskPriorityPresentation on TaskPriority {
         TaskPriority.medium => context.colors.tertiary,
         TaskPriority.low => context.colors.primary,
       };
+
+  String chipLabel(AppLocalizations l10n) => switch (this) {
+        TaskPriority.high => l10n.chipPriorityHigh,
+        TaskPriority.medium => l10n.chipPriorityMedium,
+        TaskPriority.low => l10n.chipPriorityLow,
+      };
+
+  Color detailTint(BuildContext context) {
+    final brand = context.brand;
+    return switch (this) {
+      TaskPriority.high => brand.priorityHighTint,
+      TaskPriority.medium => brand.priorityMediumTint,
+      TaskPriority.low => brand.priorityLowTint,
+    };
+  }
 }
 
 /// Small colored dot reflecting a task's [status].

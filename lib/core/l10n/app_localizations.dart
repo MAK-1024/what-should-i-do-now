@@ -108,6 +108,31 @@ class AppLocalizations {
   String get markCompleted => _t('markCompleted');
   String get reopenTask => _t('reopenTask');
   String get editTask => _t('editTask');
+  String get screenAddTask => _t('screenAddTask');
+  String get screenEditTask => _t('screenEditTask');
+  String get screenTaskDetails => _t('screenTaskDetails');
+  String get taskNameLabel => _t('taskNameLabel');
+  String get taskNamePlaceholder => _t('taskNamePlaceholder');
+  String get keepItShort => _t('keepItShort');
+  String get notesPlaceholder => _t('notesPlaceholder');
+  String get pasteLinkPlaceholder => _t('pasteLinkPlaceholder');
+  String get saveTask => _t('saveTask');
+  String get timeNeeded => _t('timeNeeded');
+  String get taskDetailsSection => _t('taskDetailsSection');
+  String get createdAtLabel => _t('createdAtLabel');
+  String get startTimer => _t('startTimer');
+  String get markDone => _t('markDone');
+  String get chipPriorityHigh => _t('chipPriorityHigh');
+  String get chipPriorityMedium => _t('chipPriorityMedium');
+  String get chipPriorityLow => _t('chipPriorityLow');
+  String durationPreset(int minutes) =>
+      _t('durationPreset').replaceAll('{n}', '$minutes');
+  String get durationOneHour => _t('durationOneHour');
+  String get customDurationTitle => _t('customDurationTitle');
+  String get customDurationHint => _t('customDurationHint');
+  String get deleteTaskAction => _t('deleteTaskAction');
+  String get notesSection => _t('notesSection');
+  String get linkSection => _t('linkSection');
   String get savedLink => _t('savedLink');
   String get notes => _t('notes');
   String get tasks => _t('tasks');
@@ -126,6 +151,16 @@ class AppLocalizations {
   String get noCategoriesBody => _t('noCategoriesBody');
   String deleteCategoryConfirm(String name) =>
       _t('deleteCategoryConfirm').replaceAll('{name}', name);
+  String get chooseAColor => _t('chooseAColor');
+  String get chooseAnIcon => _t('chooseAnIcon');
+  String get preview => _t('preview');
+  String get saveCategory => _t('saveCategory');
+  String get categoryNameLabel => _t('categoryNameLabel');
+  String get categoryNamePlaceholder => _t('categoryNamePlaceholder');
+  String categoriesSummary(int categoryCount, int taskCount) =>
+      _t('categoriesSummary')
+          .replaceAll('{c}', '$categoryCount')
+          .replaceAll('{t}', '$taskCount');
 
   // ── Profile & Settings ────────────────────────────────────────────────────
   String get profile => _t('profile');
@@ -138,6 +173,10 @@ class AppLocalizations {
   String get nameCannotBeEmpty => _t('nameCannotBeEmpty');
   String get nameTooShort => _t('nameTooShort');
   String get pushNotifications => _t('pushNotifications');
+  String get notificationPermissionTitle => _t('notificationPermissionTitle');
+  String get notificationPermissionBody => _t('notificationPermissionBody');
+  String get allowNotifications => _t('allowNotifications');
+  String get notNow => _t('notNow');
   String get reminderTime => _t('reminderTime');
   String get enabled => _t('enabled');
   String get disabled => _t('disabled');
@@ -186,6 +225,41 @@ class AppLocalizations {
   String get descriptionOptional => _t('descriptionOptional');
   String get descriptionHint => _t('descriptionHint');
   String get deleteCategoryTooltip => _t('deleteCategoryTooltip');
+
+  // ── Onboarding ──────────────────────────────────────────────────────────
+  String get onboardingTitle1 => _t('onboardingTitle1');
+  String get onboardingSubtitle1 => _t('onboardingSubtitle1');
+  String get onboardingTitle2 => _t('onboardingTitle2');
+  String get onboardingSubtitle2 => _t('onboardingSubtitle2');
+  String get onboardingTitle3 => _t('onboardingTitle3');
+  String get onboardingSubtitle3 => _t('onboardingSubtitle3');
+  String get skip => _t('skip');
+  String get next => _t('next');
+  String get getStarted => _t('getStarted');
+
+  // ── Auth — Login ──────────────────────────────────────────────────────────
+  String get welcomeBack => _t('welcomeBack');
+  String get logInSubtitle => _t('logInSubtitle');
+  String get emailLabel => _t('emailLabel');
+  String get passwordLabel => _t('passwordLabel');
+  String get forgotPassword => _t('forgotPassword');
+  String get logInButton => _t('logInButton');
+  String get newHere => _t('newHere');
+  String get createAccountLink => _t('createAccountLink');
+
+  // ── Auth — Register ───────────────────────────────────────────────────────
+  String get createAccountTitle => _t('createAccountTitle');
+  String get createAccountSubtitle => _t('createAccountSubtitle');
+  String get nameLabel => _t('nameLabel');
+  String get createPasswordLabel => _t('createPasswordLabel');
+  String get createAccountButton => _t('createAccountButton');
+  String get nameFieldPlaceholder => _t('nameFieldPlaceholder');
+  String get emailFieldPlaceholder => _t('emailFieldPlaceholder');
+  String get alreadyHaveAccountLink => _t('alreadyHaveAccountLink');
+  String get logInLink => _t('logInLink');
+
+  // ── Splash ────────────────────────────────────────────────────────────────
+  String get whatShouldIDo => _t('whatShouldIDo');
 
   // ── Common ────────────────────────────────────────────────────────────────
   String get retry => _t('retry');
@@ -259,17 +333,48 @@ class AppLocalizations {
       'returnToPending': 'Return to Pending',
       'markCompleted': 'Mark completed',
       'reopenTask': 'Reopen task',
-      'editTask': 'Edit Task',
+      'editTask': 'edit task',
+      'screenAddTask': 'add task',
+      'screenEditTask': 'edit task',
+      'screenTaskDetails': 'task details',
+      'taskNameLabel': 'task name',
+      'taskNamePlaceholder': 'read 10 pages',
+      'keepItShort': 'keep it short',
+      'notesPlaceholder': 'no distractions while reading ...',
+      'pasteLinkPlaceholder': 'paste a link',
+      'saveTask': 'save task',
+      'timeNeeded': 'time needed',
+      'taskDetailsSection': 'details',
+      'createdAtLabel': 'created',
+      'startTimer': 'start timer',
+      'markDone': 'mark done',
+      'chipPriorityHigh': 'high',
+      'chipPriorityMedium': 'medium',
+      'chipPriorityLow': 'low',
+      'durationPreset': '{n} min',
+      'durationOneHour': '1 hr',
+      'customDurationTitle': 'custom time',
+      'customDurationHint': 'Minutes',
+      'deleteTaskAction': 'delete task',
+      'notesSection': 'notes',
+      'linkSection': 'link',
       'savedLink': 'SAVED LINK',
       'notes': 'NOTES',
       'tasks': 'Tasks',
       'decide': 'Decide',
-      'categories': 'Categories',
-      'addCategory': 'Add Category',
-      'newCategory': 'New Category',
-      'createCategory': 'Create Category',
+      'categories': 'categories',
+      'addCategory': 'add category',
+      'newCategory': 'add category',
+      'createCategory': 'create category',
       'deleteCategory': 'Delete Category',
       'categoryName': 'Category Name',
+      'categoryNameLabel': 'category name',
+      'categoryNamePlaceholder': 'category name',
+      'chooseAColor': 'choose a color',
+      'chooseAnIcon': 'choose an icon',
+      'preview': 'preview',
+      'saveCategory': 'save category',
+      'categoriesSummary': '{c} categories · {t} tasks',
       'categoryNameRequired': 'Please enter a category name',
       'colorTag': 'Color Tag',
       'noCategoriesTitle': 'No categories yet',
@@ -287,6 +392,11 @@ class AppLocalizations {
       'nameCannotBeEmpty': 'Name cannot be empty.',
       'nameTooShort': 'Name must be at least 2 characters.',
       'pushNotifications': 'Push Notifications',
+      'notificationPermissionTitle': 'Stay on track with reminders',
+      'notificationPermissionBody':
+          'WSID? can send local reminders when a task timer ends and celebrate when you finish. You can change this anytime in Profile.',
+      'allowNotifications': 'Allow notifications',
+      'notNow': 'Not now',
       'reminderTime': 'Daily Reminder Time',
       'enabled': 'Enabled',
       'disabled': 'Disabled',
@@ -335,6 +445,40 @@ class AppLocalizations {
       'save': 'Save',
       'confirm': 'Confirm',
       'delete': 'Delete',
+      // Onboarding
+      'onboardingTitle1': 'stuck on what to do?',
+      'onboardingSubtitle1':
+          'Give it a spin and let us pick one task for you, no overthinking required.',
+      'onboardingTitle2': 'clear your head',
+      'onboardingSubtitle2':
+          'add everything on your mind, big or small, and organize tasks into simple categories.',
+      'onboardingTitle3': 'one task at a time',
+      'onboardingSubtitle3':
+          'Start your timer, focus on what\'s in front of you, and celebrate every small win.',
+      'skip': 'skip',
+      'next': 'next',
+      'getStarted': 'get started',
+      // Auth — Login
+      'welcomeBack': 'welcome back',
+      'logInSubtitle': 'log in to pick up where you left off.',
+      'emailLabel': 'email',
+      'passwordLabel': 'password',
+      'forgotPassword': 'forgot password?',
+      'logInButton': 'log in',
+      'newHere': 'new here? ',
+      'createAccountLink': 'create account',
+      // Auth — Register
+      'createAccountTitle': 'create your account',
+      'createAccountSubtitle': 'save the things you keep putting off.',
+      'nameLabel': 'name',
+      'createPasswordLabel': 'create a password',
+      'createAccountButton': 'create account',
+      'nameFieldPlaceholder': 'your name',
+      'emailFieldPlaceholder': 'name@example.com',
+      'alreadyHaveAccountLink': 'already have an account? ',
+      'logInLink': 'log in',
+      // Splash
+      'whatShouldIDo': 'What should I do?',
     },
     'ar': <String, String>{
       'appTitle': 'WSID?',
@@ -400,6 +544,30 @@ class AppLocalizations {
       'markCompleted': 'وضع علامة مكتملة',
       'reopenTask': 'إعادة فتح المهمة',
       'editTask': 'تعديل المهمة',
+      'screenAddTask': 'إضافة مهمة',
+      'screenEditTask': 'تعديل المهمة',
+      'screenTaskDetails': 'تفاصيل المهمة',
+      'taskNameLabel': 'اسم المهمة',
+      'taskNamePlaceholder': 'اقرأ 10 صفحات',
+      'keepItShort': 'اجعلها قصيرة',
+      'notesPlaceholder': 'بدون مشتتات أثناء القراءة ...',
+      'pasteLinkPlaceholder': 'الصق رابطاً',
+      'saveTask': 'حفظ المهمة',
+      'timeNeeded': 'الوقت المطلوب',
+      'taskDetailsSection': 'التفاصيل',
+      'createdAtLabel': 'تاريخ الإنشاء',
+      'startTimer': 'بدء المؤقت',
+      'markDone': 'وضع علامة منجزة',
+      'chipPriorityHigh': 'عالية',
+      'chipPriorityMedium': 'متوسطة',
+      'chipPriorityLow': 'منخفضة',
+      'durationPreset': '{n} د',
+      'durationOneHour': '1 س',
+      'customDurationTitle': 'وقت مخصص',
+      'customDurationHint': 'بالدقائق',
+      'deleteTaskAction': 'حذف المهمة',
+      'notesSection': 'ملاحظات',
+      'linkSection': 'رابط',
       'savedLink': 'الرابط المحفوظ',
       'notes': 'ملاحظات',
       'tasks': 'المهام',
@@ -416,6 +584,13 @@ class AppLocalizations {
       'noCategoriesBody': 'أنشئ فئات لتنظيم مهامك وتحسين الاقتراحات.',
       'deleteCategoryConfirm':
           'هل أنت متأكد من حذف "{name}"؟ لن يتم حذف المهام المرتبطة بهذه الفئة.',
+      'categoryNameLabel': 'اسم الفئة',
+      'categoryNamePlaceholder': 'اسم الفئة',
+      'chooseAColor': 'اختر لوناً',
+      'chooseAnIcon': 'اختر أيقونة',
+      'preview': 'معاينة',
+      'saveCategory': 'حفظ الفئة',
+      'categoriesSummary': '{c} فئات · {t} مهام',
       'profile': 'الملف الشخصي',
       'preferences': 'التفضيلات',
       'about': 'حول',
@@ -426,6 +601,11 @@ class AppLocalizations {
       'nameCannotBeEmpty': 'لا يمكن أن يكون الاسم فارغاً.',
       'nameTooShort': 'يجب أن يتكون الاسم من حرفين على الأقل.',
       'pushNotifications': 'الإشعارات الفورية',
+      'notificationPermissionTitle': 'ابقَ على المسار مع التذكيرات',
+      'notificationPermissionBody':
+          'يمكن لـ WSID? إرسال تذكيرات محلية عند انتهاء مؤقت المهمة والاحتفال عند الإنجاز. يمكنك تغيير ذلك في أي وقت من الملف الشخصي.',
+      'allowNotifications': 'السماح بالإشعارات',
+      'notNow': 'ليس الآن',
       'reminderTime': 'وقت التذكير اليومي',
       'enabled': 'مفعّلة',
       'disabled': 'معطّلة',
@@ -472,6 +652,40 @@ class AppLocalizations {
       'save': 'حفظ',
       'confirm': 'تأكيد',
       'delete': 'حذف',
+      // Onboarding
+      'onboardingTitle1': 'محتار ماذا تفعل؟',
+      'onboardingSubtitle1':
+          'أدِر العجلة ودعنا نختار لك مهمة واحدة، بلا تفكير زائد.',
+      'onboardingTitle2': 'صفِّ ذهنك',
+      'onboardingSubtitle2':
+          'أضف كل ما يشغل بالك، كبيراً كان أو صغيراً، ونظّم مهامك في فئات بسيطة.',
+      'onboardingTitle3': 'مهمة واحدة في كل مرة',
+      'onboardingSubtitle3':
+          'شغّل المؤقت، وركّز على ما أمامك، واحتفل بكل إنجاز صغير.',
+      'skip': 'تخطي',
+      'next': 'التالي',
+      'getStarted': 'ابدأ الآن',
+      // Auth — Login
+      'welcomeBack': 'أهلاً بعودتك',
+      'logInSubtitle': 'سجّل دخولك لتكمل من حيث توقفت.',
+      'emailLabel': 'البريد الإلكتروني',
+      'passwordLabel': 'كلمة المرور',
+      'forgotPassword': 'نسيت كلمة المرور؟',
+      'logInButton': 'تسجيل الدخول',
+      'newHere': 'جديد هنا؟ ',
+      'createAccountLink': 'إنشاء حساب',
+      // Auth — Register
+      'createAccountTitle': 'أنشئ حسابك',
+      'createAccountSubtitle': 'احفظ الأشياء التي تؤجلها دائماً.',
+      'nameLabel': 'الاسم',
+      'createPasswordLabel': 'أنشئ كلمة مرور',
+      'createAccountButton': 'إنشاء حساب',
+      'nameFieldPlaceholder': 'اسمك',
+      'emailFieldPlaceholder': 'name@example.com',
+      'alreadyHaveAccountLink': 'لديك حساب بالفعل؟ ',
+      'logInLink': 'تسجيل الدخول',
+      // Splash
+      'whatShouldIDo': 'ماذا يجب أن أفعل؟',
     },
     'it': <String, String>{
       'appTitle': 'WSID?',
@@ -537,7 +751,31 @@ class AppLocalizations {
       'returnToPending': 'Rimetti in sospeso',
       'markCompleted': 'Segna come completata',
       'reopenTask': 'Riapri attività',
-      'editTask': 'Modifica attività',
+      'editTask': 'modifica attività',
+      'screenAddTask': 'aggiungi attività',
+      'screenEditTask': 'modifica attività',
+      'screenTaskDetails': 'dettagli attività',
+      'taskNameLabel': 'nome attività',
+      'taskNamePlaceholder': 'leggi 10 pagine',
+      'keepItShort': 'mantienilo breve',
+      'notesPlaceholder': 'niente distrazioni mentre leggi ...',
+      'pasteLinkPlaceholder': 'incolla un link',
+      'saveTask': 'salva attività',
+      'timeNeeded': 'tempo necessario',
+      'taskDetailsSection': 'dettagli',
+      'createdAtLabel': 'creato',
+      'startTimer': 'avvia timer',
+      'markDone': 'segna come fatto',
+      'chipPriorityHigh': 'alta',
+      'chipPriorityMedium': 'media',
+      'chipPriorityLow': 'bassa',
+      'durationPreset': '{n} min',
+      'durationOneHour': '1 h',
+      'customDurationTitle': 'tempo personalizzato',
+      'customDurationHint': 'Minuti',
+      'deleteTaskAction': 'elimina attività',
+      'notesSection': 'note',
+      'linkSection': 'link',
       'savedLink': 'LINK SALVATO',
       'notes': 'NOTE',
       'tasks': 'Attività',
@@ -555,6 +793,13 @@ class AppLocalizations {
           'Crea categorie per organizzare le tue attività e migliorare i suggerimenti.',
       'deleteCategoryConfirm':
           'Vuoi davvero eliminare "{name}"? Le attività associate a questa categoria non verranno eliminate.',
+      'categoryNameLabel': 'nome categoria',
+      'categoryNamePlaceholder': 'nome categoria',
+      'chooseAColor': 'scegli un colore',
+      'chooseAnIcon': 'scegli un\'icona',
+      'preview': 'anteprima',
+      'saveCategory': 'salva categoria',
+      'categoriesSummary': '{c} categorie · {t} attività',
       'profile': 'Profilo',
       'preferences': 'Preferenze',
       'about': 'Informazioni',
@@ -565,6 +810,11 @@ class AppLocalizations {
       'nameCannotBeEmpty': 'Il nome non può essere vuoto.',
       'nameTooShort': 'Il nome deve contenere almeno 2 caratteri.',
       'pushNotifications': 'Notifiche push',
+      'notificationPermissionTitle': 'Resta in carreggiata con i promemoria',
+      'notificationPermissionBody':
+          'WSID? può inviare promemoria locali alla fine del timer di un\'attività e festeggiare i completamenti. Puoi modificarlo in Profilo.',
+      'allowNotifications': 'Consenti notifiche',
+      'notNow': 'Non ora',
       'reminderTime': 'Orario del promemoria',
       'enabled': 'Attive',
       'disabled': 'Disattivate',
@@ -614,6 +864,40 @@ class AppLocalizations {
       'save': 'Salva',
       'confirm': 'Conferma',
       'delete': 'Elimina',
+      // Onboarding
+      'onboardingTitle1': 'non sai cosa fare?',
+      'onboardingSubtitle1':
+          'Fai girare la ruota e lascia che scegliamo un\'attività per te, senza pensarci troppo.',
+      'onboardingTitle2': 'libera la mente',
+      'onboardingSubtitle2':
+          'aggiungi tutto ciò che hai in mente, grande o piccolo, e organizza le attività in semplici categorie.',
+      'onboardingTitle3': 'un\'attività alla volta',
+      'onboardingSubtitle3':
+          'Avvia il timer, concentrati su ciò che hai davanti e festeggia ogni piccola vittoria.',
+      'skip': 'salta',
+      'next': 'avanti',
+      'getStarted': 'inizia',
+      // Auth — Login
+      'welcomeBack': 'bentornato',
+      'logInSubtitle': 'accedi per riprendere da dove avevi lasciato.',
+      'emailLabel': 'email',
+      'passwordLabel': 'password',
+      'forgotPassword': 'password dimenticata?',
+      'logInButton': 'accedi',
+      'newHere': 'sei nuovo? ',
+      'createAccountLink': 'crea account',
+      // Auth — Register
+      'createAccountTitle': 'crea il tuo account',
+      'createAccountSubtitle': 'salva le cose che continui a rimandare.',
+      'nameLabel': 'nome',
+      'createPasswordLabel': 'crea una password',
+      'createAccountButton': 'crea account',
+      'nameFieldPlaceholder': 'il tuo nome',
+      'emailFieldPlaceholder': 'name@example.com',
+      'alreadyHaveAccountLink': 'hai già un account? ',
+      'logInLink': 'accedi',
+      // Splash
+      'whatShouldIDo': 'Cosa dovrei fare?',
     },
   };
 }

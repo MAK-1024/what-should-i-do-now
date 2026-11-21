@@ -11,7 +11,7 @@ import 'package:wsidappp/features/tasks/domain/entities/task.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_cubit.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_state.dart';
 import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/cards/task_list_tile.dart';
-import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/dialogs/task_details_sheet.dart';
+import 'package:wsidappp/features/tasks/presentation/task_flow_navigation.dart';
 import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/shared/task_status_badge.dart';
 
 /// Section header (status + count) and the grouped card of filtered tasks.
@@ -71,11 +71,9 @@ class TaskGroupListSection extends StatelessWidget {
                             key: ValueKey<String>(visible[i].id),
                             task: visible[i],
                             categoryName: categoryNames[visible[i].categoryId],
-                            onTap: () => TaskDetailsSheet.show(
+                            onTap: () => TaskFlowNavigation.openTaskDetails(
                               context,
                               task: visible[i],
-                              taskListCubit: context.read<TaskListCubit>(),
-                              categoryCubit: context.read<CategoryCubit>(),
                             ),
                           ).animate().fadeIn(
                                 delay: AppMotion.of(

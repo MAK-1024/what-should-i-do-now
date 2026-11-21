@@ -57,6 +57,18 @@ class _FakeNotificationService implements NotificationService {
   Future<void> cancelAllNotifications() async {
     allCancelled++;
   }
+
+  @override
+  Future<void> completeFirstLaunchPermissionPrompt({required bool userWantsNotifications}) {
+    // TODO: implement completeFirstLaunchPermissionPrompt
+    throw UnimplementedError();
+  }
+
+  @override
+  bool shouldPromptFirstLaunchPermission() {
+    // TODO: implement shouldPromptFirstLaunchPermission
+    throw UnimplementedError();
+  }
 }
 
 void main() {

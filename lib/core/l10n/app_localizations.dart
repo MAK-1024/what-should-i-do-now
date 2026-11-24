@@ -43,6 +43,16 @@ class AppLocalizations {
   // ── Home / Decider ────────────────────────────────────────────────────────
   String get stuckInTasks => _t('stuckInTasks');
   String get weWillPickTask => _t('weWillPickTask');
+  String get cantDecideTitle => _t('cantDecideTitle');
+  String get cantDecideSubtitle => _t('cantDecideSubtitle');
+  String get pickForMe => _t('pickForMe');
+  String get pickingForYou => _t('pickingForYou');
+  String get pickingForYouSubtitle => _t('pickingForYouSubtitle');
+  String get taskDescription => _t('taskDescription');
+  String get heresYourPick => _t('heresYourPick');
+  String get readyToStart => _t('readyToStart');
+  String get startNow => _t('startNow');
+  String get pickAnother => _t('pickAnother');
   String get suggestTask => _t('suggestTask');
   String get doIt => _t('doIt');
   String get rollAgain => _t('rollAgain');
@@ -50,6 +60,8 @@ class AppLocalizations {
   String get viewAll => _t('viewAll');
   String get keepMomentum => _t('keepMomentum');
   String get noPendingTasks => _t('noPendingTasks');
+  String get noTasksYet => _t('noTasksYet');
+  String get noTasksYetSubtitle => _t('noTasksYetSubtitle');
   String get addTasks => _t('addTasks');
   String get tryAgain => _t('tryAgain');
   String get openLink => _t('openLink');
@@ -97,6 +109,7 @@ class AppLocalizations {
   String get yourList => _t('yourList');
   String get myTasks => _t('myTasks');
   String get addTask => _t('addTask');
+  String get addATask => _t('addATask');
   String get searchTasks => _t('searchTasks');
   String get pending => _t('pending');
   String get inProgress => _t('inProgress');
@@ -110,6 +123,13 @@ class AppLocalizations {
   String get editTask => _t('editTask');
   String get screenAddTask => _t('screenAddTask');
   String get screenEditTask => _t('screenEditTask');
+  String get toDo => _t('toDo');
+  String get done => _t('done');
+  String get noCompletedTasks => _t('noCompletedTasks');
+  String get noCompletedTasksSubtitle => _t('noCompletedTasksSubtitle');
+  String get activeTaskLimitWarningTitle => _t('activeTaskLimitWarningTitle');
+  String get activeTaskLimitWarningMessage =>
+      _t('activeTaskLimitWarningMessage');
   String get screenTaskDetails => _t('screenTaskDetails');
   String get taskNameLabel => _t('taskNameLabel');
   String get taskNamePlaceholder => _t('taskNamePlaceholder');
@@ -164,6 +184,10 @@ class AppLocalizations {
 
   // ── Profile & Settings ────────────────────────────────────────────────────
   String get profile => _t('profile');
+  String get settings => _t('settings');
+  String get menuWelcome => _t('menuWelcome');
+  String get focus => _t('focus');
+  String get focusComingSoon => _t('focusComingSoon');
   String get preferences => _t('preferences');
   String get about => _t('about');
   String get account => _t('account');
@@ -189,6 +213,9 @@ class AppLocalizations {
   String get aboutAppDescription => _t('aboutAppDescription');
   String get logOut => _t('logOut');
   String get logOutConfirm => _t('logOutConfirm');
+  String get logOutTitle => _t('logOutTitle');
+  String get logOutSubtitle => _t('logOutSubtitle');
+  String get logoutButton => _t('logoutButton');
   String get deleteAccount => _t('deleteAccount');
   String get deleteAccountSubtitle => _t('deleteAccountSubtitle');
   String get deleteAccountConfirm => _t('deleteAccountConfirm');
@@ -263,7 +290,11 @@ class AppLocalizations {
 
   // ── Common ────────────────────────────────────────────────────────────────
   String get retry => _t('retry');
+  String get offlineTitle => _t('offlineTitle');
+  String get offlineSubtitle => _t('offlineSubtitle');
+  String get somethingWentWrong => _t('somethingWentWrong');
   String get cancel => _t('cancel');
+  String get cancelButton => _t('cancelButton');
   String get save => _t('save');
   String get confirm => _t('confirm');
   String get delete => _t('delete');
@@ -275,6 +306,16 @@ class AppLocalizations {
       'brandHeader': 'What should\nI do now?',
       'stuckInTasks': 'stuck in your tasks?',
       'weWillPickTask': 'we will pick a task for you',
+      'cantDecideTitle': "Can't decide? We've got you!",
+      'cantDecideSubtitle': "We'll pick one of your tasks at random, you can skip the endless.",
+      'pickForMe': 'pick for me',
+      'pickingForYou': 'picking for you…',
+      'pickingForYouSubtitle': 'hang tight while we find your task',
+      'taskDescription': 'task description',
+      'heresYourPick': "here's your pick",
+      'readyToStart': 'ready to start?',
+      'startNow': 'start now',
+      'pickAnother': 'pick another',
       'suggestTask': 'suggest a task 🔀',
       'doIt': 'Do it 😊',
       'rollAgain': 'roll again 🔄',
@@ -282,6 +323,8 @@ class AppLocalizations {
       'viewAll': 'View all',
       'keepMomentum': 'Keep the momentum going',
       'noPendingTasks': 'No pending tasks found. Add tasks to get started!',
+      'noTasksYet': 'no tasks ... yet!',
+      'noTasksYetSubtitle': "Add some tasks and let's get things rolling!",
       'addTasks': 'Add Tasks',
       'tryAgain': 'Try Again',
       'openLink': 'Open link',
@@ -323,6 +366,7 @@ class AppLocalizations {
       'yourList': 'YOUR LIST',
       'myTasks': 'My Tasks',
       'addTask': '+ Add Task',
+      'addATask': 'add a task',
       'searchTasks': 'Search tasks',
       'pending': 'Pending',
       'inProgress': 'In Progress',
@@ -336,6 +380,14 @@ class AppLocalizations {
       'editTask': 'edit task',
       'screenAddTask': 'add task',
       'screenEditTask': 'edit task',
+      'toDo': 'to do',
+      'done': 'done',
+      'noCompletedTasks': 'no completed tasks',
+      'noCompletedTasksSubtitle':
+          'finished tasks show up here. let\'s get to it!',
+      'activeTaskLimitWarningTitle': 'one task at a time!',
+      'activeTaskLimitWarningMessage':
+          'You already have a task in progress. Complete it first before picking another one.',
       'screenTaskDetails': 'task details',
       'taskNameLabel': 'task name',
       'taskNamePlaceholder': 'read 10 pages',
@@ -383,6 +435,10 @@ class AppLocalizations {
       'deleteCategoryConfirm':
           'Are you sure you want to delete "{name}"? Tasks associated with this category will not be deleted.',
       'profile': 'Profile',
+      'settings': 'Settings',
+      'menuWelcome': 'welcome,',
+      'focus': 'Focus',
+      'focusComingSoon': 'Focus mode is coming soon.',
       'preferences': 'Preferences',
       'about': 'About',
       'account': 'Account',
@@ -410,6 +466,10 @@ class AppLocalizations {
           'A focused task decider that helps you pick what to work on next.',
       'logOut': 'Log Out',
       'logOutConfirm': 'Are you sure you want to log out?',
+      'logOutTitle': 'are you sure to log out?',
+      'logOutSubtitle':
+          'Taking a little break? Your tasks will be right here when you come back.',
+      'logoutButton': 'logout',
       'deleteAccount': 'Delete Account',
       'deleteAccountSubtitle': 'This action is permanent and cannot be undone.',
       'deleteAccountConfirm':
@@ -441,7 +501,12 @@ class AppLocalizations {
       'descriptionHint': 'Add context, subtasks, or reference notes...',
       'deleteCategoryTooltip': 'Delete Category',
       'retry': 'Retry',
+      'offlineTitle': "Looks like you're offline!",
+      'offlineSubtitle':
+          'Looks like your internet connection took a little break. Check your connection and try again!',
+      'somethingWentWrong': 'Something went wrong',
       'cancel': 'Cancel',
+      'cancelButton': 'cancel',
       'save': 'Save',
       'confirm': 'Confirm',
       'delete': 'Delete',
@@ -485,6 +550,16 @@ class AppLocalizations {
       'brandHeader': 'ماذا يجب\nأن أفعل الآن؟',
       'stuckInTasks': 'عالق في مهامك؟',
       'weWillPickTask': 'سنختار لك مهمة',
+      'cantDecideTitle': 'لا تستطيع أن تقرر؟ نحن هنا لمساعدتك!',
+      'cantDecideSubtitle': 'سنختار لك إحدى مهامك عشوائياً لتتجاوز التردد.',
+      'pickForMe': 'اختر لي',
+      'pickingForYou': 'نختار لك الآن…',
+      'pickingForYouSubtitle': 'انتظر قليلاً بينما نجد مهمتك',
+      'taskDescription': 'وصف المهمة',
+      'heresYourPick': 'إليك ما اخترناه لك',
+      'readyToStart': 'مستعد للبدء؟',
+      'startNow': 'ابدأ الآن',
+      'pickAnother': 'اختر مهمة أخرى',
       'suggestTask': 'اقترح مهمة 🔀',
       'doIt': 'افعلها 😊',
       'rollAgain': 'جرّب مجدداً 🔄',
@@ -492,6 +567,8 @@ class AppLocalizations {
       'viewAll': 'عرض الكل',
       'keepMomentum': 'حافظ على الزخم',
       'noPendingTasks': 'لا توجد مهام معلقة. أضف مهام للبدء!',
+      'noTasksYet': 'لا توجد مهام ... حتى الآن!',
+      'noTasksYetSubtitle': 'أضف بعض المهام ولنبدأ بالعمل!',
       'addTasks': 'إضافة مهام',
       'tryAgain': 'حاول مرة أخرى',
       'openLink': 'فتح الرابط',
@@ -533,6 +610,7 @@ class AppLocalizations {
       'yourList': 'قائمتك',
       'myTasks': 'مهامي',
       'addTask': '+ إضافة مهمة',
+      'addATask': 'إضافة مهمة',
       'searchTasks': 'البحث في المهام',
       'pending': 'معلقة',
       'inProgress': 'قيد التنفيذ',
@@ -546,6 +624,13 @@ class AppLocalizations {
       'editTask': 'تعديل المهمة',
       'screenAddTask': 'إضافة مهمة',
       'screenEditTask': 'تعديل المهمة',
+      'toDo': 'قيد الانتظار',
+      'done': 'مكتملة',
+      'noCompletedTasks': 'لا توجد مهام مكتملة',
+      'noCompletedTasksSubtitle': 'المهام المنجزة تظهر هنا. فلنبدأ الإنجاز!',
+      'activeTaskLimitWarningTitle': 'مهمة واحدة في كل مرة!',
+      'activeTaskLimitWarningMessage':
+          'لديك مهمة قيد التنفيذ حالياً. أكملها أولاً قبل اختيار مهمة أخرى.',
       'screenTaskDetails': 'تفاصيل المهمة',
       'taskNameLabel': 'اسم المهمة',
       'taskNamePlaceholder': 'اقرأ 10 صفحات',
@@ -592,6 +677,10 @@ class AppLocalizations {
       'saveCategory': 'حفظ الفئة',
       'categoriesSummary': '{c} فئات · {t} مهام',
       'profile': 'الملف الشخصي',
+      'settings': 'الإعدادات',
+      'menuWelcome': 'مرحباً،',
+      'focus': 'تركيز',
+      'focusComingSoon': 'وضع التركيز قريباً.',
       'preferences': 'التفضيلات',
       'about': 'حول',
       'account': 'الحساب',
@@ -618,6 +707,10 @@ class AppLocalizations {
       'aboutAppDescription': 'أداة تركيز تساعدك على اختيار ما تعمل عليه تالياً.',
       'logOut': 'تسجيل الخروج',
       'logOutConfirm': 'هل أنت متأكد من تسجيل الخروج؟',
+      'logOutTitle': 'هل أنت متأكد من تسجيل الخروج؟',
+      'logOutSubtitle':
+          'استراحة قصيرة؟ مهامك ستكون هنا بانتظارك عند عودتك.',
+      'logoutButton': 'تسجيل الخروج',
       'deleteAccount': 'حذف الحساب',
       'deleteAccountSubtitle': 'هذا الإجراء نهائي ولا يمكن التراجع عنه.',
       'deleteAccountConfirm':
@@ -648,7 +741,12 @@ class AppLocalizations {
       'descriptionHint': 'أضف سياقاً أو مهام فرعية أو ملاحظات...',
       'deleteCategoryTooltip': 'حذف الفئة',
       'retry': 'إعادة المحاولة',
+      'offlineTitle': 'يبدو أنك غير متصل بالإنترنت!',
+      'offlineSubtitle':
+          'يبدو أن اتصالك بالإنترنت قد انقطع. تحقق من اتصالك وحاول مرة أخرى!',
+      'somethingWentWrong': 'حدث خطأ ما',
       'cancel': 'إلغاء',
+      'cancelButton': 'إلغاء',
       'save': 'حفظ',
       'confirm': 'تأكيد',
       'delete': 'حذف',
@@ -692,6 +790,16 @@ class AppLocalizations {
       'brandHeader': 'Cosa dovrei\nfare adesso?',
       'stuckInTasks': 'bloccato nelle tue attività?',
       'weWillPickTask': 'sceglieremo un\'attività per te',
+      'cantDecideTitle': 'Non riesci a decidere? Ci pensiamo noi!',
+      'cantDecideSubtitle': 'Sceglieremo una delle tue attività a caso, così puoi evitare l\'indecisione.',
+      'pickForMe': 'scegli per me',
+      'pickingForYou': 'stiamo scegliendo per te…',
+      'pickingForYouSubtitle': 'aspetta un attimo mentre troviamo la tua attività',
+      'taskDescription': 'descrizione attività',
+      'heresYourPick': 'ecco la tua scelta',
+      'readyToStart': 'pronto a iniziare?',
+      'startNow': 'inizia ora',
+      'pickAnother': 'scegli un\'altra',
       'suggestTask': 'suggerisci un\'attività 🔀',
       'doIt': 'Fallo 😊',
       'rollAgain': 'ritenta 🔄',
@@ -700,6 +808,8 @@ class AppLocalizations {
       'keepMomentum': 'Mantieni lo slancio',
       'noPendingTasks':
           'Nessuna attività in sospeso. Aggiungi attività per iniziare!',
+      'noTasksYet': 'nessuna attività ... ancora!',
+      'noTasksYetSubtitle': 'Aggiungi alcune attività e iniziamo!',
       'addTasks': 'Aggiungi attività',
       'tryAgain': 'Riprova',
       'openLink': 'Apri link',
@@ -741,6 +851,7 @@ class AppLocalizations {
       'yourList': 'LA TUA LISTA',
       'myTasks': 'Le mie attività',
       'addTask': '+ Aggiungi attività',
+      'addATask': 'aggiungi un\'attività',
       'searchTasks': 'Cerca attività',
       'pending': 'In sospeso',
       'inProgress': 'In corso',
@@ -754,6 +865,14 @@ class AppLocalizations {
       'editTask': 'modifica attività',
       'screenAddTask': 'aggiungi attività',
       'screenEditTask': 'modifica attività',
+      'toDo': 'da fare',
+      'done': 'completate',
+      'noCompletedTasks': 'nessuna attività completata',
+      'noCompletedTasksSubtitle':
+          'le attività completate appariranno qui. mettiamoci al lavoro!',
+      'activeTaskLimitWarningTitle': 'un\'attività alla volta!',
+      'activeTaskLimitWarningMessage':
+          'Hai già un\'attività in corso. Completala prima di sceglierne un\'altra.',
       'screenTaskDetails': 'dettagli attività',
       'taskNameLabel': 'nome attività',
       'taskNamePlaceholder': 'leggi 10 pagine',
@@ -801,6 +920,10 @@ class AppLocalizations {
       'saveCategory': 'salva categoria',
       'categoriesSummary': '{c} categorie · {t} attività',
       'profile': 'Profilo',
+      'settings': 'Impostazioni',
+      'menuWelcome': 'ciao,',
+      'focus': 'Focus',
+      'focusComingSoon': 'La modalità focus arriverà presto.',
       'preferences': 'Preferenze',
       'about': 'Informazioni',
       'account': 'Account',
@@ -828,6 +951,10 @@ class AppLocalizations {
           'Un assistente che ti aiuta a scegliere su cosa lavorare dopo.',
       'logOut': 'Esci',
       'logOutConfirm': 'Sei sicuro di voler uscire?',
+      'logOutTitle': 'sei sicuro di voler uscire?',
+      'logOutSubtitle':
+          'Ti prendi una piccola pausa? Le tue attività saranno qui ad aspettarti al tuo ritorno.',
+      'logoutButton': 'esci',
       'deleteAccount': 'Elimina account',
       'deleteAccountSubtitle':
           'Questa azione è permanente e non può essere annullata.',
@@ -860,7 +987,12 @@ class AppLocalizations {
       'descriptionHint': 'Aggiungi contesto, sotto-attività o note...',
       'deleteCategoryTooltip': 'Elimina categoria',
       'retry': 'Riprova',
+      'offlineTitle': "Sembra che tu sia offline!",
+      'offlineSubtitle':
+          'Sembra che la tua connessione internet si sia interrotta. Controlla la connessione e riprova!',
+      'somethingWentWrong': 'Qualcosa è andato storto',
       'cancel': 'Annulla',
+      'cancelButton': 'annulla',
       'save': 'Salva',
       'confirm': 'Conferma',
       'delete': 'Elimina',

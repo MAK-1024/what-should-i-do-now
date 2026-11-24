@@ -34,7 +34,11 @@ class GoRouterRefreshStream extends ChangeNotifier {
 
 /// Application router configuration using [GoRouter] with authentication guards and app shell.
 abstract final class AppRouter {
+  static final GlobalKey<NavigatorState> rootNavigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: 'root');
+
   static final GoRouter router = GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: RouteList.splash,
     debugLogDiagnostics: true,
     refreshListenable: GoRouterRefreshStream(

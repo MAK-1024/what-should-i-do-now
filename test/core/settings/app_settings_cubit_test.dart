@@ -45,7 +45,7 @@ class _FakeNotificationService implements NotificationService {
   }
 
   @override
-  Future<void> scheduleTaskTimer(Task task) async {}
+  Future<void> scheduleTaskTimer(Task task, {int? durationMinutes}) async {}
 
   @override
   Future<void> showTaskCompletedCelebration(Task task) async {}

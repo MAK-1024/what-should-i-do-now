@@ -3,6 +3,7 @@ import 'package:wsidappp/config/theme/app_colors.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/features/tasks/domain/entities/task.dart';
+import 'package:wsidappp/shared/widgets/wsid_status_badge.dart';
 
 extension TaskStatusPresentation on TaskStatus {
   String label(AppLocalizations l10n) => switch (this) {
@@ -74,20 +75,15 @@ class TaskStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color color = status.color(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: context.radius.full,
-      ),
-      child: Text(
-        status.label(context.l10n),
-        style: context.txt.labelSmall?.copyWith(
-          color: color,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
+    return WsidStatusBadge(
+      label: status.label(context.l10n),
+      color: status.color(context),
+      variant: switch (status) {
+        TaskStatus.pending => WsidStatusBadgeVariant.pending,
+        TaskStatus.inProgress => WsidStatusBadgeVariant.inProgress,
+        TaskStatus.completed => WsidStatusBadgeVariant.completed,
+        TaskStatus.archived => WsidStatusBadgeVariant.archived,
+      },
     );
   }
 }

@@ -8,11 +8,15 @@ class TaskMetaRow extends StatelessWidget {
     super.key,
     required this.categoryName,
     required this.estimatedMinutes,
+    this.categoryIcon,
+    this.categoryColor,
     this.alignment = WrapAlignment.center,
   });
 
   final String? categoryName;
   final int? estimatedMinutes;
+  final IconData? categoryIcon;
+  final Color? categoryColor;
   final WrapAlignment alignment;
 
   @override
@@ -25,15 +29,15 @@ class TaskMetaRow extends StatelessWidget {
       runSpacing: 8,
       children: <Widget>[
         _MetaChip(
-          icon: Icons.folder_outlined,
+          icon: categoryIcon ?? Icons.folder_outlined,
           label: categoryName ?? context.l10n.uncategorized,
-          color: context.colors.primary,
+          color: categoryColor ?? context.colors.primary,
         ),
         if (minutes != null)
           _MetaChip(
             icon: Icons.schedule_outlined,
             label: context.l10n.minutesLong(minutes),
-            color: context.colors.tertiary,
+            color: const Color(0xFFB4833E),
           ),
       ],
     );

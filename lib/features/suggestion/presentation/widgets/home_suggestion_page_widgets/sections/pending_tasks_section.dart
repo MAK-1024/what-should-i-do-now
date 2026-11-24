@@ -15,6 +15,7 @@ import 'package:wsidappp/features/tasks/domain/entities/task.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_cubit.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_state.dart';
 import 'package:wsidappp/features/tasks/presentation/task_flow_navigation.dart';
+import 'package:wsidappp/shared/widgets/shimmer/wsid_shimmer.dart';
 
 /// "Pending" preview listing the next few pending tasks with a link to the
 /// full backlog.
@@ -26,7 +27,7 @@ class PendingTasksSection extends StatelessWidget {
   Future<void> _openDetails(BuildContext context, Task task) async {
     final SuggestionCubit suggestionCubit = context.read<SuggestionCubit>();
     await TaskFlowNavigation.openTaskDetails(context, task: task);
-    if (context.mounted) suggestionCubit.checkActiveTask();
+    if (context.mounted) await suggestionCubit.checkActiveTask();
   }
 
   @override
@@ -123,20 +124,7 @@ class _PendingPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget card = Card(
-      child: SizedBox(
-        height: 64 * 3,
-        width: double.infinity,
-        child: ColoredBox(color: context.colors.surfaceContainerHighest),
-      ),
-    );
-    if (!AppMotion.isEnabled(context)) return card;
-    return card
-        .animate(onPlay: (controller) => controller.repeat())
-        .shimmer(
-          duration: AppMotion.slow * 3,
-          color: context.colors.surface,
-        );
+    return const WsidShimmerListCard();
   }
 }
 

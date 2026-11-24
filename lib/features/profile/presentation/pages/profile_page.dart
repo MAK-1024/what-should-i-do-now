@@ -8,6 +8,7 @@ import 'package:wsidappp/features/profile/presentation/cubit/profile_cubit.dart'
 import 'package:wsidappp/features/profile/presentation/cubit/profile_state.dart';
 import 'package:wsidappp/features/profile/presentation/widgets/profile_page_widgets/cards/account_info_card.dart';
 import 'package:wsidappp/features/profile/presentation/widgets/profile_page_widgets/cards/preferences_card.dart';
+import 'package:wsidappp/shared/widgets/shimmer/wsid_shimmer.dart';
 import 'package:wsidappp/features/profile/presentation/widgets/profile_page_widgets/cards/profile_header_card.dart';
 import 'package:wsidappp/shared/widgets/custom_app_bar.dart';
 
@@ -51,8 +52,8 @@ class _ProfileView extends StatelessWidget {
         buildWhen: (_, ProfileState current) => _actionError(current) == null,
         builder: (BuildContext context, ProfileState state) {
           return state.when(
-            initial: () => const SizedBox.shrink(),
-            loading: () => const Center(child: CircularProgressIndicator()),
+            initial: () => const WsidShimmerProfileBody(),
+            loading: () => const WsidShimmerProfileBody(),
             loaded: (UserProfile profile, bool isSaving, _) => ListView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
               children: <Widget>[

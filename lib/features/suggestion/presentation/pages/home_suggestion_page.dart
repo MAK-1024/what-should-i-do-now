@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:wsidappp/config/routes/route_list.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/di/injection.dart';
-import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_cubit.dart';
 import 'package:wsidappp/features/suggestion/presentation/cubit/suggestion_cubit.dart';
 import 'package:wsidappp/features/suggestion/presentation/cubit/suggestion_state.dart';
+import 'package:wsidappp/features/suggestion/presentation/widgets/home_suggestion_page_widgets/cards/active_task_card.dart';
 import 'package:wsidappp/features/suggestion/presentation/widgets/home_suggestion_page_widgets/sections/decider_section.dart';
-import 'package:wsidappp/features/suggestion/presentation/widgets/home_suggestion_page_widgets/sections/home_brand_title.dart';
-import 'package:wsidappp/features/suggestion/presentation/widgets/home_suggestion_page_widgets/sections/pending_tasks_section.dart';
+import 'package:wsidappp/features/tasks/domain/entities/task.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_cubit.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_state.dart';
 import 'package:wsidappp/shared/widgets/custom_app_bar.dart';
@@ -80,7 +77,7 @@ class _HomeSuggestionViewState extends State<_HomeSuggestionView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WsidAppBar.logo(
+      appBar: const WsidAppBar.logo(
         onLeadingPressed: null,
         onNotificationsPressed: null,
       ),
@@ -117,13 +114,28 @@ class _HomeSuggestionViewState extends State<_HomeSuggestionView> {
             child: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 500),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    SizedBox(height: 16),
-                    DeciderSection(),
-                    SizedBox(height: 40),
-                    PendingTasksSection(),
+                    const SizedBox(height: 16),
+                    const DeciderSection(),
+                    BlocBuilder<TaskListCubit, TaskListState>(
+                      builder: (BuildContext context, TaskListState state) {
+                        final Task? activeTask = state.mapOrNull(
+                          loaded: (l) {
+                            for (final Task t in l.tasks) {
+                              if (t.status == TaskStatus.inProgress) return t;
+                            }
+                            return null;
+                          },
+                        );
+                        if (activeTask == null) return const SizedBox.shrink();
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 24),
+                          child: ActiveTaskCard(task: activeTask),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

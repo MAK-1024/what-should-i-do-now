@@ -92,7 +92,7 @@ class _FakeNotificationService implements NotificationService {
   Future<void> scheduleDailyReminder({int hour = 9, int minute = 0}) async {}
 
   @override
-  Future<void> scheduleTaskTimer(Task task) async {
+  Future<void> scheduleTaskTimer(Task task, {int? durationMinutes}) async {
     scheduledTimers++;
   }
 

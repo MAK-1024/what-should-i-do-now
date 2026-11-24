@@ -28,9 +28,11 @@ class OnboardingSlide extends StatelessWidget {
       alignment: Alignment.center,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
             SizedBox(
               width: imageSize,
               height: imageSize,
@@ -72,6 +74,7 @@ class OnboardingSlide extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ),
+  );
   }
 }

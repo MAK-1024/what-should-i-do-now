@@ -36,11 +36,7 @@ class SuggestionCubit extends Cubit<SuggestionState> {
     result.fold(
       (failure) => emit(SuggestionState.error(message: failure.message)),
       (activeTask) {
-        if (activeTask != null) {
-          emit(SuggestionState.hasActiveTask(activeTask: activeTask));
-        } else {
-          emit(const SuggestionState.initial());
-        }
+        emit(const SuggestionState.initial());
       },
     );
   }
@@ -116,7 +112,7 @@ class SuggestionCubit extends Cubit<SuggestionState> {
       (failure) => emit(SuggestionState.error(message: failure.message)),
       (updatedTask) {
         _excludedIds.clear();
-        emit(SuggestionState.hasActiveTask(activeTask: updatedTask));
+        emit(const SuggestionState.initial());
         if (updatedTask.estimatedDuration != null &&
             updatedTask.estimatedDuration! > 0) {
           _notificationService.scheduleTaskTimer(updatedTask);

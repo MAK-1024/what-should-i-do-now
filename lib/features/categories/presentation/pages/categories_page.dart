@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:wsidappp/config/routes/route_list.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/features/categories/domain/entities/category.dart';
@@ -14,6 +12,7 @@ import 'package:wsidappp/features/tasks/domain/entities/task.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_cubit.dart';
 import 'package:wsidappp/features/tasks/presentation/cubit/task_list_state.dart';
 import 'package:wsidappp/shared/widgets/custom_app_bar.dart';
+import 'package:wsidappp/shared/widgets/shimmer/wsid_shimmer.dart';
 
 /// Categories grid (`332:1566`) with add-category flow (`337:1912`).
 class CategoriesPage extends StatefulWidget {
@@ -102,8 +101,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
         },
         builder: (BuildContext context, CategoryState state) {
           return state.when(
-            initial: () => const SizedBox.shrink(),
-            loading: () => const Center(child: CircularProgressIndicator()),
+            initial: () => const WsidShimmerCategoryGrid(itemCount: 6),
+            loading: () => const WsidShimmerCategoryGrid(itemCount: 6),
             loaded: (List<Category> categories, _) {
               return BlocBuilder<TaskListCubit, TaskListState>(
                 builder: (BuildContext context, TaskListState taskState) {

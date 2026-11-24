@@ -10,11 +10,15 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
+import 'package:connectivity_plus/connectivity_plus.dart' as _i895;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 import 'package:supabase_flutter/supabase_flutter.dart' as _i454;
 import 'package:wsidappp/core/di/register_module.dart' as _i151;
+import 'package:wsidappp/core/network/network_cubit.dart' as _i178;
+import 'package:wsidappp/core/network/network_info.dart' as _i739;
+import 'package:wsidappp/core/network/network_info_impl.dart' as _i108;
 import 'package:wsidappp/core/services/notification_service.dart' as _i1002;
 import 'package:wsidappp/core/settings/app_settings_cubit.dart' as _i977;
 import 'package:wsidappp/features/auth/data/repositories/auth_repository_impl.dart'
@@ -93,6 +97,7 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
     gh.lazySingleton<_i454.SupabaseClient>(() => registerModule.supabaseClient);
+    gh.lazySingleton<_i895.Connectivity>(() => registerModule.connectivity);
     await gh.lazySingletonAsync<_i460.SharedPreferences>(
       () => registerModule.sharedPreferences,
       preResolve: true,
@@ -172,6 +177,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i606.UpdateTaskUseCase>(
       () => _i606.UpdateTaskUseCase(gh<_i468.TaskRepository>()),
     );
+    gh.lazySingleton<_i739.NetworkInfo>(
+      () => _i108.NetworkInfoImpl(gh<_i895.Connectivity>()),
+    );
     gh.factory<_i992.TaskListCubit>(
       () => _i992.TaskListCubit(
         gh<_i133.GetTasksUseCase>(),
@@ -189,6 +197,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i90.UpdateProfileUseCase>(
       () => _i90.UpdateProfileUseCase(gh<_i1016.ProfileRepository>()),
+    );
+    gh.lazySingleton<_i178.NetworkCubit>(
+      () => _i178.NetworkCubit(gh<_i739.NetworkInfo>()),
     );
     gh.factory<_i676.ProfileCubit>(
       () => _i676.ProfileCubit(

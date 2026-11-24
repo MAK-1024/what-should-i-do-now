@@ -30,22 +30,17 @@ abstract final class AppAssets {
 
   static const String authLogin = 'assets/images/char/login.png';
   static const String authRegister = 'assets/images/char/register.png';
-
-  // Illustrations
+  // Illustrations & Mascot Characters
+  static const String cantDecide = 'assets/images/char/cant_decide.png';
   static const String choosing = 'assets/images/char/choosing.png';
-  static const String error = 'assets/images/char/error.png';
+  static const String letsgo = 'assets/images/char/letsgo.png';
+  static const String qustion = 'assets/images/char/qustion.png';
   static const String happy = 'assets/images/char/happy.png';
+  static const String error = 'assets/images/char/error.png';
   static const String hearbreak = 'assets/images/char/hearbreak.png';
   static const String leaving = 'assets/images/char/leaving.png';
-  static const String letsgo = 'assets/images/char/letsgo.png';
-  static const String login = 'assets/images/char/login.png';
   static const String noconnection = 'assets/images/char/noconnection.png';
   static const String notfound = 'assets/images/char/notfound.png';
-  static const String onboarding1 = 'assets/images/char/onboarding_1.png';
-  static const String onboarding2 = 'assets/images/char/onboarding_2.png';
-  static const String onboarding3 = 'assets/images/char/onboarding_3.png';
-  static const String qustion = 'assets/images/char/qustion.png';
-  static const String register = 'assets/images/char/register.png';
   static const String sleeping = 'assets/images/char/sleeping.png';
   static const String star = 'assets/images/char/star.png';
   static const String telescope = 'assets/images/char/telescope.png';

@@ -67,7 +67,7 @@ class _ImmediateBrandSplash extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         backgroundColor:
-            useDark ? AppColors.darkBackground : AppColors.surface,
+            useDark ? AppColors.darkBackground : AppColors.green500,
         body: const _ImmediateBrandSplashBody(),
       ),
     );

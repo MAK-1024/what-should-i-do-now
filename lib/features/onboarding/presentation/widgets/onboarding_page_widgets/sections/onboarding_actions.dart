@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wsidappp/shared/widgets/wsid_button.dart';
-import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
 
 /// Outlined "skip" and filled "next" / "get started" buttons, side by side.

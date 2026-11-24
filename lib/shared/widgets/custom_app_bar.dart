@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:wsidappp/config/theme/app_colors.dart';
 import 'package:wsidappp/core/constants/app_assets.dart';
+import 'package:wsidappp/app/widgets/app_side_menu.dart';
 import 'package:wsidappp/shared/widgets/wsid_icon_button.dart';
 
 enum WsidAppBarVariant { logo, main, sub }
@@ -95,7 +96,7 @@ class WsidAppBar extends StatelessWidget implements PreferredSizeWidget {
                   tooltip: isSub ? 'back' : 'menu',
                   onPressed: isSub
                       ? (onLeadingPressed ?? () => Navigator.maybePop(context))
-                      : onLeadingPressed,
+                      : (onLeadingPressed ?? () => openShellSideMenu(context)),
                 ),
                 Expanded(
                   child: variant == WsidAppBarVariant.logo

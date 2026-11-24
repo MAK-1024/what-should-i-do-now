@@ -72,7 +72,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
       OnboardingSlide(
         imagePath: AppAssets.onboardingIdea,
-        imageSize: 244,
+        imageSize: 224,
         title: l10n.onboardingTitle2,
         subtitle: l10n.onboardingSubtitle2,
       ),

@@ -8,10 +8,9 @@ import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/constants/app_assets.dart';
 import 'package:wsidappp/core/di/injection.dart';
 import 'package:wsidappp/core/settings/app_settings_cubit.dart';
-import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/core/services/notification_service.dart';
 import 'package:wsidappp/shared/widgets/notification_permission_dialog.dart';
-import 'package:wsidappp/splash_screen.dart';
+import 'package:wsidappp/features/onboarding/presentation/widgets/splash_screen.dart';
 
 /// Brand splash aligned with Figma `448:3734`, then routes to onboarding/auth/home.
 class SplashPage extends StatefulWidget {

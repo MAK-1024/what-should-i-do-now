@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:wsidappp/config/theme/app_colors.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
+import 'package:wsidappp/core/constants/category_appearance.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
+import 'package:wsidappp/features/categories/domain/entities/category.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_cubit.dart';
 import 'package:wsidappp/features/categories/presentation/cubit/category_state.dart';
 import 'package:wsidappp/features/suggestion/presentation/cubit/suggestion_cubit.dart';
 import 'package:wsidappp/features/tasks/domain/entities/task.dart';
-import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/shared/task_status_badge.dart';
+import 'package:wsidappp/features/tasks/presentation/cubit/task_list_cubit.dart';
+import 'package:wsidappp/features/tasks/presentation/task_flow_navigation.dart';
+import 'package:wsidappp/shared/widgets/task_meta_row.dart';
+import 'package:wsidappp/shared/widgets/wsid_button.dart';
+import 'package:wsidappp/shared/widgets/wsid_card_container.dart';
+import 'package:wsidappp/shared/widgets/wsid_status_badge.dart';
 
-/// Card displayed when the user is actively working on a committed task.
+/// Card displayed under the decider picker when a task is in progress.
 class ActiveTaskCard extends StatelessWidget {
   const ActiveTaskCard({
     super.key,
@@ -20,41 +25,23 @@ class ActiveTaskCard extends StatelessWidget {
 
   final Task task;
 
-  Future<void> _openLink(BuildContext context, String urlString) async {
-    final Uri? uri = Uri.tryParse(urlString);
-    if (uri != null && await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${context.l10n.couldNotOpenLink}: $urlString'),
-          backgroundColor: context.colors.error,
-        ),
-      );
-    }
-  }
-
-  Color _getPriorityColor(TaskPriority priority) {
-    switch (priority) {
-      case TaskPriority.high:
-        return AppColors.error;
-      case TaskPriority.medium:
-        return AppColors.accent;
-      case TaskPriority.low:
-        return AppColors.secondary;
+  Future<void> _markCompleted(BuildContext context) async {
+    final cubit = context.read<TaskListCubit>();
+    await cubit.changeTaskStatus(task, TaskStatus.completed);
+    if (context.mounted) {
+      await context.read<SuggestionCubit>().checkActiveTask();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final cubit = context.read<SuggestionCubit>();
 
-    final String? categoryName = context.select<CategoryCubit, String?>((c) {
+    final Category? category = context.select<CategoryCubit, Category?>((c) {
       return c.state.maybeWhen(
         loaded: (categories, _) {
           for (final cat in categories) {
-            if (cat.id == task.categoryId) return cat.name;
+            if (cat.id == task.categoryId) return cat;
           }
           return null;
         },
@@ -62,187 +49,86 @@ class ActiveTaskCard extends StatelessWidget {
       );
     });
 
-    final priorityColor = _getPriorityColor(task.priority);
+    final categoryName = category?.name ?? l10n.uncategorized;
+    final categoryColor = CategoryAppearance.colorForHex(category?.color).iconCircleColor;
+    final categoryIcon = CategoryAppearance.iconForKey(category?.icon).icon;
 
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: context.radius.lg,
-        side: BorderSide(
-          color: context.colors.primary.withValues(alpha: 0.5),
-          width: 1.5,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // Header Row: IN PROGRESS badge + priority
-            Row(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 4.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryContainer,
-                    borderRadius: context.radius.full,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Icon(
-                        Icons.play_arrow,
-                        size: 14,
-                        color: AppColors.primary,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        l10n.inProgress.toUpperCase(),
-                        style: context.txt.labelSmall?.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.8,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 3.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: priorityColor.withValues(alpha: 0.15),
-                    borderRadius: context.radius.sm,
-                  ),
-                  child: Text(
-                    task.priority.label(l10n).toUpperCase(),
-                    style: context.txt.labelSmall?.copyWith(
-                      color: priorityColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // Task Title
-            Text(
-              task.title,
-              style: context.txt.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
+    return WsidCardContainer(
+      onTap: () => TaskFlowNavigation.openTaskDetails(context, task: task),
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // Header: Status Badge + tap hint
+          Row(
+            children: <Widget>[
+              WsidStatusBadge(
+                label: l10n.inProgress,
+                color: context.colors.primary,
+                icon: Icons.play_arrow_rounded,
+                variant: WsidStatusBadgeVariant.inProgress,
               ),
-            ),
-
-            if (task.description != null && task.description!.isNotEmpty) ...<Widget>[
-              const SizedBox(height: 8),
-              Text(
-                task.description!,
-                style: context.txt.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
+              const Spacer(),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: context.brand.mutedText,
+                size: 20,
               ),
             ],
+          ),
+          const SizedBox(height: 12),
 
-            const SizedBox(height: 16),
-
-            // Metadata Row: Category & Duration
-            Wrap(
-              spacing: 12.0,
-              runSpacing: 8.0,
-              children: <Widget>[
-                if (categoryName != null)
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Icon(
-                        Icons.folder_outlined,
-                        size: 16,
-                        color: AppColors.textSecondary,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        categoryName,
-                        style: context.txt.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                if (task.estimatedDuration != null)
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Icon(
-                        Icons.schedule_outlined,
-                        size: 16,
-                        color: AppColors.textSecondary,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        l10n.minutesShort(task.estimatedDuration!),
-                        style: context.txt.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                if (task.link != null && task.link!.isNotEmpty)
-                  InkWell(
-                    onTap: () => _openLink(context, task.link!),
-                    borderRadius: context.radius.sm,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Icon(
-                          Icons.open_in_new,
-                          size: 16,
-                          color: context.colors.primary,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          l10n.openLink,
-                          style: context.txt.bodySmall?.copyWith(
-                            color: context.colors.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-              ],
+          // Task Title
+          Text(
+            task.title,
+            style: context.typo.h3Bold.copyWith(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: context.isLightTheme
+                  ? context.colors.primary
+                  : context.brand.headlineText,
             ),
+          ),
 
-            const SizedBox(height: 24),
-
-            // Action Buttons
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: FilledButton.icon(
-                    icon: const Icon(Icons.check_circle_outline),
-                    label: Text(l10n.markCompleted),
-                    onPressed: () => cubit.completeTask(task.id),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                OutlinedButton.icon(
-                  icon: const Icon(Icons.undo),
-                  label: Text(l10n.returnToPending),
-                  onPressed: () => cubit.returnToPool(task.id),
-                ),
-              ],
+          if (task.description != null && task.description!.isNotEmpty) ...<Widget>[
+            const SizedBox(height: 6),
+            Text(
+              task.description!,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: context.screenSubtitleStyle.copyWith(
+                fontSize: 14,
+                color: context.brand.bodyText,
+              ),
             ),
           ],
-        ),
+          const SizedBox(height: 14),
+
+          // Metadata + Done button Row
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: TaskMetaRow(
+                  categoryName: categoryName,
+                  categoryColor: categoryColor,
+                  categoryIcon: categoryIcon,
+                  estimatedMinutes: task.estimatedDuration,
+                ),
+              ),
+              const SizedBox(width: 12),
+              WsidButton(
+                onPressed: () => _markCompleted(context),
+                label: l10n.done,
+                icon: Icons.check_rounded,
+                variant: WsidButtonVariant.primary,
+                size: WsidButtonSize.small,
+              ),
+            ],
+          ),
+        ],
       ),
-    ).animate().fadeIn(duration: 250.ms).slideY(begin: 0.1, end: 0);
+    ).animate().fadeIn(duration: 250.ms).slideY(begin: 0.08, end: 0);
   }
 }

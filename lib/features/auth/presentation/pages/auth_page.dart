@@ -7,7 +7,9 @@ import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/core/utils/app_motion.dart';
 import 'package:wsidappp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:wsidappp/features/auth/presentation/cubit/auth_state.dart';
+import 'package:wsidappp/shared/widgets/floating_mascot.dart';
 import 'package:wsidappp/shared/widgets/wsid_button.dart';
+import 'package:wsidappp/shared/widgets/wsid_card_container.dart';
 import 'package:wsidappp/shared/widgets/wsid_text_field.dart';
 import 'package:wsidappp/features/auth/presentation/widgets/auth_page_widgets/shared/auth_mode_switch.dart';
 
@@ -70,7 +72,6 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final brand = context.brand;
 
     return Scaffold(
       body: Stack(
@@ -116,24 +117,28 @@ class _AuthPageState extends State<AuthPage> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                SizedBox(
-                                  width: _mascotWidth,
-                                  height: _isSignUp
-                                      ? _registerMascotHeight
-                                      : _loginMascotHeight,
-                                  child: Image.asset(
-                                    _isSignUp
-                                        ? AppAssets.authRegister
-                                        : AppAssets.authLogin,
-                                    fit: BoxFit.contain,
-                                    filterQuality: FilterQuality.high,
-                                  ),
-                                )
-                                    .animate(key: ValueKey<bool>(_isSignUp))
-                                    .fadeIn(
-                                      duration: motion,
-                                      curve: AppMotion.standard,
+                                FloatingMascot(
+                                  offsetY: 6.0,
+                                  duration: const Duration(milliseconds: 2400),
+                                  child: SizedBox(
+                                    width: _mascotWidth,
+                                    height: _isSignUp
+                                        ? _registerMascotHeight
+                                        : _loginMascotHeight,
+                                    child: Image.asset(
+                                      _isSignUp
+                                          ? AppAssets.authRegister
+                                          : AppAssets.authLogin,
+                                      fit: BoxFit.contain,
+                                      filterQuality: FilterQuality.high,
                                     ),
+                                  )
+                                      .animate(key: ValueKey<bool>(_isSignUp))
+                                      .fadeIn(
+                                        duration: motion,
+                                        curve: AppMotion.standard,
+                                      ),
+                                ),
                                 const SizedBox(height: 32),
                                 Text(
                                   _isSignUp
@@ -271,25 +276,9 @@ class _AuthFormShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (context.isLightTheme) {
-      return DecoratedBox(
-        decoration: BoxDecoration(
-          color: context.brand.cardFill,
-          borderRadius: context.radius.xl,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
-          child: child,
-        ),
-      );
-    }
-
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
-        child: child,
-      ),
+    return WsidCardContainer(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+      child: child,
     );
   }
 }

@@ -39,12 +39,11 @@ class SplashBrandSection extends StatelessWidget {
               top: _iconTop * scaleY,
               width: _iconWidth * scaleX,
               height: _iconHeight * scaleY,
-              child: Image.asset(
+              child: SvgPicture.asset(
                 AppAssets.splashIcon,
                 width: _iconWidth * scaleX,
                 height: _iconHeight * scaleY,
                 fit: BoxFit.contain,
-                filterQuality: FilterQuality.high,
               ),
             ),
             Positioned(

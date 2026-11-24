@@ -40,7 +40,7 @@ class SplashScreen extends StatefulWidget {
     this.finalBackgroundColor = AppColors.surface,
     this.wordmarkAsset = AppAssets.splashWordmark,
     this.iconAsset = AppAssets.splashIcon,
-    this.holdAfter = const Duration(milliseconds: 600),
+    this.holdAfter = const Duration(milliseconds: 250),
   });
 
   static const Color _green400 = Color(0xFF7CA18C);
@@ -194,20 +194,20 @@ class _SplashScreenState extends State<SplashScreen>
 // ---------------------------------------------------------------------------
 
 class _Timeline {
-  static const double blank = 800; // frame 0 hold
-  static const double fadeIn = 100; // 0 -> 1
-  static const double hold1 = 300;
-  static const double toFrown1 = 200; // 1 -> 2
-  static const double hold2 = 500;
-  static const double toFrown2 = 300; // 2 -> 3
-  static const double hold3 = 1000;
-  static const double toFinal = 300; // 3 -> 4
+  static const double blank = 120; // frame 0 hold
+  static const double fadeIn = 180; // 0 -> 1
+  static const double hold1 = 200;
+  static const double toFrown1 = 180; // 1 -> 2
+  static const double hold2 = 180;
+  static const double toFrown2 = 220; // 2 -> 3
+  static const double hold3 = 280;
+  static const double toFinal = 320; // 3 -> 4
 
   static const double fadeInAt = blank;
   static const double frown1At = fadeInAt + fadeIn + hold1;
   static const double frown2At = frown1At + toFrown1 + hold2;
   static const double finalAt = frown2At + toFrown2 + hold3;
-  static const double total = finalAt + toFinal; // 3500
+  static const double total = finalAt + toFinal; // 1680
 }
 
 double _seg(double ms, double start, double duration) => Curves.easeInOut

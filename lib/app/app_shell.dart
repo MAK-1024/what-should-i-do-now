@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wsidappp/app/widgets/app_side_menu.dart';
+import 'package:wsidappp/app/widgets/shell_drawer_scope.dart';
 import 'package:wsidappp/app/widgets/shell_nav_item.dart';
 import 'package:wsidappp/config/routes/route_list.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
@@ -36,8 +38,82 @@ class AppShell extends StatelessWidget {
   }
 }
 
-class _ShellScaffold extends StatelessWidget {
+class _ShellScaffold extends StatefulWidget {
   const _ShellScaffold({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_ShellScaffold> createState() => _ShellScaffoldState();
+}
+
+class _ShellScaffoldState extends State<_ShellScaffold> {
+  bool _drawerOpen = false;
+
+  void _openDrawer() => setState(() => _drawerOpen = true);
+
+  void _closeDrawer() {
+    if (_drawerOpen) setState(() => _drawerOpen = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ShellDrawerScope(
+      openDrawer: _openDrawer,
+      closeDrawer: _closeDrawer,
+      child: PopScope(
+        canPop: !_drawerOpen,
+        onPopInvokedWithResult: (bool didPop, Object? result) {
+          if (!didPop && _drawerOpen) _closeDrawer();
+        },
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            _ShellScaffoldBody(child: widget.child),
+            if (_drawerOpen) AppSideMenu(onClose: _closeDrawer),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ShellScaffoldBody extends StatelessWidget {
+  const _ShellScaffoldBody({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<TaskListCubit, TaskListState>(
+      listenWhen: (_, TaskListState current) => _actionFailure(current) != null,
+      listener: (BuildContext context, TaskListState state) {
+        final TaskActionFailure? failure = _actionFailure(state);
+        if (failure == null) return;
+        final l10n = context.l10n;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              failure.when(
+                activeTaskExists: () => l10n.activeTaskExists,
+                server: (String message) => message,
+              ),
+            ),
+            backgroundColor: context.colors.error,
+          ),
+        );
+        context.read<TaskListCubit>().clearActionError();
+      },
+      child: _ScaffoldWithNav(child: child),
+    );
+  }
+
+  TaskActionFailure? _actionFailure(TaskListState state) =>
+      state.mapOrNull(loaded: (l) => l.actionFailure);
+}
+
+class _ScaffoldWithNav extends StatelessWidget {
+  const _ScaffoldWithNav({required this.child});
 
   final Widget child;
 
@@ -62,36 +138,6 @@ class _ShellScaffold extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final selectedIndex = _selectedIndex(context);
-    final l10n = context.l10n;
-
-    return BlocListener<TaskListCubit, TaskListState>(
-      listenWhen: (_, TaskListState current) => _actionFailure(current) != null,
-      listener: (BuildContext context, TaskListState state) {
-        final TaskActionFailure? failure = _actionFailure(state);
-        if (failure == null) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              failure.when(
-                activeTaskExists: () => l10n.activeTaskExists,
-                server: (String message) => message,
-              ),
-            ),
-            backgroundColor: context.colors.error,
-          ),
-        );
-        context.read<TaskListCubit>().clearActionError();
-      },
-      child: _buildScaffold(context, selectedIndex, l10n),
-    );
-  }
-
-  TaskActionFailure? _actionFailure(TaskListState state) =>
-      state.mapOrNull(loaded: (l) => l.actionFailure);
-
   void _onDestinationSelected(BuildContext context, int index) {
     switch (index) {
       case 0:
@@ -105,11 +151,10 @@ class _ShellScaffold extends StatelessWidget {
     }
   }
 
-  Widget _buildScaffold(
-    BuildContext context,
-    int selectedIndex,
-    AppLocalizations l10n,
-  ) {
+  @override
+  Widget build(BuildContext context) {
+    final selectedIndex = _selectedIndex(context);
+    final l10n = context.l10n;
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) =>
           constraints.maxWidth < _wideLayoutBreakpoint

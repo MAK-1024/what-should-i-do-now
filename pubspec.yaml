@@ -54,6 +54,7 @@ dependencies:
   permission_handler: ^13.0.2
   flutter_timezone: ^5.1.1
   flutter_svg: ^2.5.0
+  connectivity_plus: ^7.3.2
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:wsidappp/config/routes/route_list.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
 import 'package:wsidappp/core/constants/task_duration_presets.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
@@ -16,10 +14,11 @@ import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/
 import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/sections/task_search_bar.dart';
 import 'package:wsidappp/features/tasks/presentation/widgets/tasks_page_widgets/shared/task_status_badge.dart';
 import 'package:wsidappp/shared/widgets/wsid_icon_button.dart';
+import 'package:wsidappp/shared/widgets/wsid_tab_bar.dart';
 import 'package:wsidappp/shared/widgets/wsid_task_banner.dart';
 import 'package:wsidappp/shared/widgets/custom_app_bar.dart';
 
-/// Pending tasks backlog with search and priority, time, and category filters.
+/// Tasks backlog divided into 'to do' (pending) and 'done' (completed) tabs.
 class TasksPage extends StatefulWidget {
   const TasksPage({super.key});
 
@@ -97,6 +96,7 @@ class _TaskFilters extends StatelessWidget {
 
 class _TasksPageState extends State<TasksPage> {
   static const EdgeInsets _hPadding = EdgeInsets.symmetric(horizontal: 20);
+  int _selectedTabIndex = 0;
   bool _showFilters = false;
   TaskPriority? _priorityFilter;
   RangeValues? _durationRange;
@@ -113,7 +113,7 @@ class _TasksPageState extends State<TasksPage> {
     _durationRange = null;
     _showFilters = false;
     final TaskListCubit cubit = context.read<TaskListCubit>();
-    cubit.setStatusFilter(TaskStatus.pending);
+    cubit.setStatusFilter(null);
     cubit.setCategoryFilter(null);
     cubit.setSearchQuery('');
   }
@@ -138,6 +138,7 @@ class _TasksPageState extends State<TasksPage> {
         },
       );
     });
+
     final Map<String, String> categoryNames = context
         .select<CategoryCubit, Map<String, String>>((CategoryCubit cubit) {
           return cubit.state.maybeWhen(
@@ -147,6 +148,9 @@ class _TasksPageState extends State<TasksPage> {
             orElse: () => const <String, String>{},
           );
         });
+
+    final isToDoTab = _selectedTabIndex == 0;
+
     return Scaffold(
       appBar: WsidAppBar.main(title: l10n.myTasks),
       body: BlocListener<TaskListCubit, TaskListState>(
@@ -172,6 +176,20 @@ class _TasksPageState extends State<TasksPage> {
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.only(top: 16, bottom: 32),
               children: <Widget>[
+                // Top Tab Bar: "to do" | "done"
+                Padding(
+                  padding: _hPadding,
+                  child: WsidTabBar(
+                    labels: <String>[l10n.toDo, l10n.done],
+                    selectedIndex: _selectedTabIndex,
+                    onChanged: (int index) {
+                      setState(() => _selectedTabIndex = index);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Search Bar & Filters
                 Padding(
                   padding: _hPadding,
                   child: Row(
@@ -190,6 +208,7 @@ class _TasksPageState extends State<TasksPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
+
                 if (_showFilters) ...<Widget>[
                   Padding(
                     padding: _hPadding,
@@ -215,36 +234,36 @@ class _TasksPageState extends State<TasksPage> {
                   const TaskCategoryFilterChips(padding: _hPadding),
                   const SizedBox(height: 16),
                 ],
-                Padding(
-                  padding: _hPadding,
-                  child: WsidTaskBanner(
-                    label: l10n.inProgress,
-                    title:
-                        activeTask?.title ??
-                        "you don't have a task in progress",
-                    subtitle: activeTask == null
-                        ? 'choose a task or roll for a suggestion'
-                        : categoryNames[activeTask.categoryId] ??
-                              l10n.uncategorized,
-                    actionLabel: l10n.suggestTask,
-                    onAction: () {
-                      if (activeTask != null) {
-                        TaskFlowNavigation.openTaskDetails(
-                          context,
-                          task: activeTask,
-                        );
-                      } else {
-                        context.go(RouteList.home);
-                      }
-                    },
+
+                // In "to do" tab: In-progress banner if user has an active task
+                if (isToDoTab && activeTask != null) ...<Widget>[
+                  Padding(
+                    padding: _hPadding,
+                    child: WsidTaskBanner(
+                      label: l10n.inProgress,
+                      title: activeTask.title,
+                      subtitle: categoryNames[activeTask.categoryId] ??
+                          l10n.uncategorized,
+                      actionLabel: l10n.startTask,
+                      onAction: () => TaskFlowNavigation.openTaskDetails(
+                        context,
+                        task: activeTask,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
+                  const SizedBox(height: 12),
+                ],
+
+                // Tab Content: Either 'to do' (pending) or 'done' (completed)
                 Padding(
                   padding: _hPadding,
                   child: TaskGroupListSection(
+                    targetStatus: isToDoTab
+                        ? TaskStatus.pending
+                        : TaskStatus.completed,
                     priorityFilter: _priorityFilter,
                     durationRange: _durationRange,
+                    onResetFilters: _resetFilters,
                   ),
                 ),
               ],

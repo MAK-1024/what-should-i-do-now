@@ -5,8 +5,10 @@ import 'package:wsidappp/config/routes/app_router.dart';
 import 'package:wsidappp/config/theme/app_theme.dart';
 import 'package:wsidappp/core/di/injection.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
+import 'package:wsidappp/core/network/network_cubit.dart';
 import 'package:wsidappp/core/settings/app_settings_cubit.dart';
 import 'package:wsidappp/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:wsidappp/shared/widgets/network_connection_barrier.dart';
 
 class WhatShouldIDoApp extends StatelessWidget {
   const WhatShouldIDoApp({super.key});
@@ -20,6 +22,9 @@ class WhatShouldIDoApp extends StatelessWidget {
         ),
         BlocProvider<AuthCubit>(
           create: (_) => getIt<AuthCubit>()..checkAuthStatus(),
+        ),
+        BlocProvider<NetworkCubit>(
+          create: (_) => getIt<NetworkCubit>()..init(),
         ),
       ],
       child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
@@ -44,6 +49,11 @@ class WhatShouldIDoApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
+
+            builder: (BuildContext context, Widget? child) =>
+                NetworkConnectionBarrier(
+              child: child ?? const SizedBox.shrink(),
+            ),
 
             routerConfig: appRouter,
           );

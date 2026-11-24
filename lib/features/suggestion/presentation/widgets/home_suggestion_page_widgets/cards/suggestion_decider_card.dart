@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:wsidappp/config/theme/theme_extensions.dart';
+import 'package:wsidappp/core/constants/category_appearance.dart';
 import 'package:wsidappp/core/l10n/app_localizations.dart';
 import 'package:wsidappp/core/services/external_link_launcher.dart';
 import 'package:wsidappp/core/utils/app_motion.dart';
+import 'package:wsidappp/features/categories/domain/entities/category.dart';
 import 'package:wsidappp/features/tasks/domain/entities/task.dart';
 import 'package:wsidappp/shared/widgets/task_meta_row.dart';
+import 'package:wsidappp/shared/widgets/wsid_button.dart';
 
 /// Slot-machine style card: cycles through [candidates] while [winner] is
 /// null, then expands to reveal the winning task with its actions.
@@ -18,7 +21,8 @@ class SuggestionDeciderCard extends StatefulWidget {
     super.key,
     required this.candidates,
     required this.winner,
-    required this.categoryNames,
+    this.categoryNames = const <String, String>{},
+    this.categoriesById = const <String, Category>{},
     required this.onDoIt,
     required this.onRollAgain,
   });
@@ -26,6 +30,7 @@ class SuggestionDeciderCard extends StatefulWidget {
   final List<Task> candidates;
   final Task? winner;
   final Map<String, String> categoryNames;
+  final Map<String, Category> categoriesById;
   final ValueChanged<Task> onDoIt;
   final VoidCallback onRollAgain;
 
@@ -111,24 +116,56 @@ class _SuggestionDeciderCardState extends State<SuggestionDeciderCard> {
   Widget build(BuildContext context) {
     final Task? winner = widget.winner;
 
+    final Task? currentTask = widget.candidates.isEmpty
+        ? null
+        : widget.candidates[_tick % widget.candidates.length];
+    final Category? currentCat = currentTask != null
+        ? widget.categoriesById[currentTask.categoryId]
+        : null;
+    final String? currentCategory = currentCat?.name ??
+        (currentTask != null ? widget.categoryNames[currentTask.categoryId] : null);
+
+    final Category? winnerCategory = winner != null
+        ? widget.categoriesById[winner.categoryId]
+        : null;
+    final IconData? winnerIcon = winnerCategory != null
+        ? CategoryAppearance.iconForKey(winnerCategory.icon).icon
+        : null;
+    final Color? winnerColor = winnerCategory != null
+        ? CategoryAppearance.colorForHex(winnerCategory.color).iconCircleColor
+        : null;
+    final String? winnerCategoryName = winnerCategory?.name ??
+        (winner != null ? widget.categoryNames[winner.categoryId] : null);
+
     return Card(
+      elevation: 0,
+      color: context.isLightTheme ? Colors.white : context.colors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          color: context.isLightTheme
+              ? const Color(0xFFE5E9EB)
+              : context.colors.outlineVariant,
+        ),
+      ),
       child: AnimatedSize(
         duration: AppMotion.of(context, AppMotion.slow),
         curve: AppMotion.standard,
         alignment: Alignment.topCenter,
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
           child: winner == null
               ? _CyclingContent(
-                  task: widget.candidates.isEmpty
-                      ? null
-                      : widget.candidates[_tick % widget.candidates.length],
+                  task: currentTask,
                   tick: _tick,
+                  categoryName: currentCategory,
                 )
               : _RevealedContent(
                   key: ValueKey<String>(winner.id),
                   task: winner,
-                  categoryName: widget.categoryNames[winner.categoryId],
+                  categoryName: winnerCategoryName,
+                  categoryIcon: winnerIcon,
+                  categoryColor: winnerColor,
                   onDoIt: () => widget.onDoIt(winner),
                   onRollAgain: widget.onRollAgain,
                 ),
@@ -139,18 +176,30 @@ class _SuggestionDeciderCardState extends State<SuggestionDeciderCard> {
 }
 
 class _CyclingContent extends StatelessWidget {
-  const _CyclingContent({required this.task, required this.tick});
+  const _CyclingContent({
+    required this.task,
+    required this.tick,
+    this.categoryName,
+  });
 
   final Task? task;
   final int tick;
+  final String? categoryName;
 
   @override
   Widget build(BuildContext context) {
     final Task? current = task;
+    final l10n = context.l10n;
+
+    final String subtitleText = current?.description?.isNotEmpty == true
+        ? current!.description!
+        : (categoryName?.isNotEmpty == true
+            ? categoryName!
+            : l10n.taskDescription);
 
     return SizedBox(
       width: double.infinity,
-      height: 72,
+      height: 76,
       child: ClipRect(
         child: current == null
             ? Icon(
@@ -170,21 +219,26 @@ class _CyclingContent extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: context.txt.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 18,
+                      color: context.isLightTheme
+                          ? const Color(0xFF1E293B)
+                          : context.colors.onSurface,
                     ),
                   ),
-                  if (current.description?.isNotEmpty ?? false) ...<Widget>[
-                    const SizedBox(height: 4),
-                    Text(
-                      current.description!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: context.txt.bodySmall?.copyWith(
-                        color: context.colors.onSurfaceVariant,
-                      ),
+                  const SizedBox(height: 6),
+                  Text(
+                    subtitleText,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: context.txt.bodyMedium?.copyWith(
+                      color: context.isLightTheme
+                          ? const Color(0xFF64748B)
+                          : context.colors.onSurfaceVariant,
+                      fontSize: 14,
                     ),
-                  ],
+                  ),
                 ],
               )
                 .animate(key: ValueKey<int>(tick))
@@ -211,12 +265,16 @@ class _RevealedContent extends StatelessWidget {
     super.key,
     required this.task,
     required this.categoryName,
+    this.categoryIcon,
+    this.categoryColor,
     required this.onDoIt,
     required this.onRollAgain,
   });
 
   final Task task;
   final String? categoryName;
+  final IconData? categoryIcon;
+  final Color? categoryColor;
   final VoidCallback onDoIt;
   final VoidCallback onRollAgain;
 
@@ -236,6 +294,9 @@ class _RevealedContent extends StatelessWidget {
     final l10n = context.l10n;
     final String? description = task.description;
     final String? link = task.link;
+    final String subtitleText = description?.isNotEmpty == true
+        ? description!
+        : l10n.taskDescription;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -243,21 +304,30 @@ class _RevealedContent extends StatelessWidget {
         Text(
           task.title,
           textAlign: TextAlign.center,
-          style: context.txt.titleLarge?.copyWith(fontWeight: FontWeight.w800),
-        ),
-        if (description != null && description.isNotEmpty) ...<Widget>[
-          const SizedBox(height: 8),
-          Text(
-            description,
-            textAlign: TextAlign.center,
-            style: context.txt.bodyMedium?.copyWith(
-              color: context.colors.onSurfaceVariant,
-            ),
+          style: context.txt.titleMedium?.copyWith(
+            fontWeight: FontWeight.w800,
+            fontSize: 18,
+            color: context.isLightTheme
+                ? const Color(0xFF1E293B)
+                : context.colors.onSurface,
           ),
-        ],
+        ),
+        const SizedBox(height: 6),
+        Text(
+          subtitleText,
+          textAlign: TextAlign.center,
+          style: context.txt.bodyMedium?.copyWith(
+            color: context.isLightTheme
+                ? const Color(0xFF64748B)
+                : context.colors.onSurfaceVariant,
+            fontSize: 14,
+          ),
+        ),
         const SizedBox(height: 16),
         TaskMetaRow(
           categoryName: categoryName,
+          categoryIcon: categoryIcon,
+          categoryColor: categoryColor,
           estimatedMinutes: task.estimatedDuration,
         ),
         if (link != null && link.isNotEmpty) ...<Widget>[
@@ -268,24 +338,28 @@ class _RevealedContent extends StatelessWidget {
             onPressed: () => _openLink(context, link),
           ),
         ],
-        const SizedBox(height: 20),
+        const SizedBox(height: 24),
         Row(
           children: <Widget>[
             Expanded(
-              child: FilledButton(
+              child: WsidButton(
                 onPressed: onDoIt,
-                child: Text(l10n.doIt, maxLines: 1),
+                label: l10n.startNow,
+                icon: Icons.sentiment_satisfied_alt,
+                iconOnLeading: false,
+                variant: WsidButtonVariant.primary,
+                size: WsidButtonSize.medium,
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: context.colors.primary,
-                  side: BorderSide(color: context.colors.primary),
-                ),
+              child: WsidButton(
                 onPressed: onRollAgain,
-                child: Text(l10n.rollAgain, maxLines: 1),
+                label: l10n.pickAnother,
+                icon: Icons.sync_rounded,
+                iconOnLeading: false,
+                variant: WsidButtonVariant.outlined,
+                size: WsidButtonSize.medium,
               ),
             ),
           ],
